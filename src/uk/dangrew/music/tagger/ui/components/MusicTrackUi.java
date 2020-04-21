@@ -38,9 +38,9 @@ public class MusicTrackUi extends Pane {
                 new AbsolutePositioning(0.9)
         ));
 
-        this.getChildren().add(new MtCurrentPosition(canvasDimensions, configuration));
         this.getChildren().add(new MtTrackScale(canvasDimensions, configuration));
         this.getChildren().add(new MediaControlsUi(canvasDimensions, musicController));
+        this.getChildren().add(new MtCurrentPosition(canvasDimensions, configuration));
     }
 
     Line skeleton() {

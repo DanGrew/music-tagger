@@ -2,6 +2,9 @@ package uk.dangrew.music.tagger.ui.positioning;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
 
+import javax.swing.event.ChangeListener;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -13,6 +16,7 @@ public class RelativePositioning implements PortionProvider {
     private final Double minimumClamp;
     private final Double maximumClamp;
     private final ReadOnlyDoubleProperty property;
+    private final Set<Consumer<Double>> registrations;
 
     public RelativePositioning(ReadOnlyDoubleProperty property) {
         this(property, null, null);
@@ -24,8 +28,11 @@ public class RelativePositioning implements PortionProvider {
             Double maximumClamp
     ) {
         this.property = property;
+        this.registrations = new HashSet<>();
         this.minimumClamp = minimumClamp;
         this.maximumClamp = maximumClamp;
+
+        property.addListener((s, o, n) -> notifyRegistrations(n.doubleValue()));
     }
 
     @Override
@@ -35,7 +42,17 @@ public class RelativePositioning implements PortionProvider {
 
     @Override
     public void registerForUpdates(Consumer<Double> handler) {
-        property.addListener((s, o, n) -> handler.accept(clamp(n.doubleValue())));
+        registrations.add(handler);
+    }
+
+    private void notifyRegistrations(double value){
+        double clampedValue = clamp(value);
+        registrations.forEach(consumer -> consumer.accept(clampedValue));
+    }
+
+    @Override
+    public void unregister(Consumer<Double> handler) {
+        registrations.remove(handler);
     }
 
     private double clamp(double value) {

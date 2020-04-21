@@ -11,6 +11,7 @@ package uk.dangrew.music.tagger.main;
 import com.sun.javafx.application.PlatformImpl;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.stage.Stage;
 import uk.dangrew.kode.friendly.javafx.FriendlyMediaPlayer;
@@ -47,7 +48,9 @@ public class MusicTagger extends Application {
             configuration.currentTimeProperty().setValue(n.toSeconds());
         });
 
-        stage.setScene(new Scene(new MusicTrackEditor(musicController, configuration)));
+        BorderPane wrapper = new BorderPane(new MusicTrackEditor(musicController, configuration));
+        wrapper.setTop(new MtMenuBar(musicTrack));
+        stage.setScene(new Scene(wrapper));
         stage.setMaximized(true);
         stage.show();
     }//End Method

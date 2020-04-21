@@ -31,8 +31,8 @@ public class MusicControllerTest {
 
     @Test
     public void shouldPause(){
-        systemUnderTest.pause();
-        verify(musicTrack).pause();
+        systemUnderTest.togglePause();
+        verify(musicTrack).togglePause();
     }
 
     @Test

@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import java.util.OptionalDouble;
 import java.util.function.DoubleConsumer;
 
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -50,5 +51,37 @@ public class NodePositioningTester {
 
         heightUpdater.accept(0.6);
         assertThat(node.getTranslateY(), is( height.get() * heightProperty.get()));
+    }
+
+    public void assertThatNodeDoesNotTranslateWhenWidthDimensionChanges(double widthPortion){
+        assertThat(node.getTranslateX(), is( 0.0));
+
+        width.set(1000.0);
+        assertThat(node.getTranslateX(), is( not(width.get() * widthPortion)));
+    }
+
+    public void assertThatNodeDoesNotTranslateWhenHeightDimensionChanges(double heightPortion){
+        assertThat(node.getTranslateY(), is( 0.0));
+
+        height.set(500.0);
+        assertThat(node.getTranslateY(), is( not(height.get() * heightPortion)));
+    }
+
+    public void assertThatWidthPositionDoesNotRecalculateWhenPropertiesChange(ReadOnlyDoubleProperty widthProperty, DoubleConsumer widthUpdater){
+        width.set(1000.0);
+        widthUpdater.accept(0.1);
+        double previous = width.get() * widthProperty.get();
+
+        widthUpdater.accept(0.6);
+        assertThat(node.getTranslateX(), is( not(previous)));
+    }
+
+    public void assertThatHeightPositionDoesNotRecalculateWhenPropertiesChange(ReadOnlyDoubleProperty heightProperty, DoubleConsumer heightUpdater){
+        height.set(1000.0);
+        heightUpdater.accept(0.1);
+        double previous = height.get() * heightProperty.get();
+
+        heightUpdater.accept(0.6);
+        assertThat(node.getTranslateY(), is( not(previous)));
     }
 }

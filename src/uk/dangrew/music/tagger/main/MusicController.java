@@ -10,38 +10,42 @@ public class MusicController {
     private static final Duration SKIP_DURATION_SECONDS = Duration.seconds(30);
     private static final double RATE_INCREMENT = 0.1;
 
-    private final ChangeableMedia musicTrack;
+    private final ChangeableMedia media;
 
-    public MusicController(ChangeableMedia musicTrack){
-        this.musicTrack = musicTrack;
+    public MusicController(ChangeableMedia media){
+        this.media = media;
+    }
+
+    public ReadOnlyMedia getMedia(){
+        return media;
     }
 
     public void play(){
-        musicTrack.play();
+        media.play();
     }
 
-    public void pause(){
-        musicTrack.pause();
+    public void togglePause(){
+        media.togglePause();
     }
 
     public void stop(){
-        musicTrack.stop();
+        media.stop();
     }
 
     public void plus30(){
-        musicTrack.seek(musicTrack.currentTime().add(SKIP_DURATION_SECONDS));
+        media.seek(media.currentTime().add(SKIP_DURATION_SECONDS));
     }
 
     public void minus30(){
-        musicTrack.seek(musicTrack.currentTime().subtract(SKIP_DURATION_SECONDS));
+        media.seek(media.currentTime().subtract(SKIP_DURATION_SECONDS));
     }
 
     public void speedUp(){
-        musicTrack.setRate(musicTrack.rate() + RATE_INCREMENT);
+        media.setRate(media.rate() + RATE_INCREMENT);
     }
 
     public void slowDown(){
-        musicTrack.setRate(musicTrack.rate() - RATE_INCREMENT);
+        media.setRate(media.rate() - RATE_INCREMENT);
     }
 }
 

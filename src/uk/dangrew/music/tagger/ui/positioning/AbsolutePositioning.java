@@ -25,4 +25,9 @@ public class AbsolutePositioning implements PortionProvider {
     public void registerForUpdates(Consumer<Double> handler) {
         //do nothing.
     }
+
+    @Override
+    public void unregister(Consumer<Double> handler) {
+        //do nothing
+    }
 }

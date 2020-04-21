@@ -83,4 +83,38 @@ public class CanvasLineRelativePositioningTest {
         assertThat(line.getEndY(), is(350.0));
     }
 
+    @Test public void shouldUnregisterWhenUnbound(){
+        DoubleProperty widthStart = new SimpleDoubleProperty(0.2);
+        DoubleProperty widthEnd = new SimpleDoubleProperty(0.3);
+        DoubleProperty heightStart = new SimpleDoubleProperty(0.4);
+        DoubleProperty heightEnd = new SimpleDoubleProperty(0.5);
+
+        systemUnderTest.bind(line, new LinePortions(
+                new RelativePositioning(widthStart),
+                new RelativePositioning(widthEnd),
+                new RelativePositioning(heightStart),
+                new RelativePositioning(heightEnd)
+        ));
+
+        width.setValue(1000.0);
+        height.setValue(500.0);
+
+        assertThat(line.getStartX(), is(200.0));
+        assertThat(line.getEndX(), is(300.0));
+        assertThat(line.getStartY(), is(200.0));
+        assertThat(line.getEndY(), is(250.0));
+
+        systemUnderTest.unbind(line);
+
+        widthStart.setValue(0.4);
+        widthEnd.setValue(0.5);
+        heightStart.setValue(0.6);
+        heightEnd.setValue(0.7);
+
+        assertThat(line.getStartX(), is(200.0));
+        assertThat(line.getEndX(), is(300.0));
+        assertThat(line.getStartY(), is(200.0));
+        assertThat(line.getEndY(), is(250.0));
+    }
+
 }

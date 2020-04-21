@@ -10,4 +10,6 @@ public interface PortionProvider {
     public double getPositioning();
 
     public void registerForUpdates(Consumer<Double> handler);
+
+    public void unregister(Consumer<Double> handler);
 }

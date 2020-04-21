@@ -10,8 +10,7 @@ import java.util.function.Consumer;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class RelativePositioningTest {
 
@@ -42,6 +41,22 @@ public class RelativePositioningTest {
 
         property.set(40.0);
         verify(consumer).accept(30.0);
+    }
+
+    @Test public void shouldUnregister(){
+        Consumer<Double> consumer = mock(Consumer.class);
+        systemUnderTest.registerForUpdates(consumer);
+
+        property.set(13.0);
+        verify(consumer).accept(13.0);
+
+        systemUnderTest.unregister(consumer);
+
+        property.set(0.0);
+        verify(consumer, times(1)).accept(anyDouble());
+
+        property.set(40.0);
+        verify(consumer, times(1)).accept(anyDouble());
     }
 
 }

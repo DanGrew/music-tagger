@@ -19,43 +19,50 @@ public class MtTrackScaleMarker extends Pane {
     static final double MARKER_WIDTH_END_PORTION = 0.52;
     static final double LABEL_WIDTH_PORTION = 0.3;
 
+    private final CanvasLineRelativePositioning canvasLineRelativePositioning;
+    private final CanvasNodeRelativePositioning canvasNodeRelativePositioning;
     private final DoubleProperty heightPortionProperty;
     private final Line marker;
     private final Label label;
-    private double secondsThroughTrack;
 
     public MtTrackScaleMarker(
-            CanvasDimensions canvasDimensions,
-            double initialHeightProportion,
-            double secondsThroughTrack
+            CanvasDimensions canvasDimensions
     ) {
         this.marker = new Line(0, 0, 0, 0);
-        this.heightPortionProperty = new SimpleDoubleProperty(initialHeightProportion);
-        this.label = new Label(MusicTimestamp.format(secondsThroughTrack));
-        this.secondsThroughTrack = secondsThroughTrack;
+        this.heightPortionProperty = new SimpleDoubleProperty(0);
+        this.label = new Label(MusicTimestamp.format(0));
 
         this.getChildren().add(marker);
         this.getChildren().add(label);
 
         RelativePositioning heightPosition = new RelativePositioning(heightPortionProperty);
-        new CanvasLineRelativePositioning(canvasDimensions).bind(marker, new LinePortions(
+        this.canvasLineRelativePositioning = new CanvasLineRelativePositioning(canvasDimensions);
+        this.canvasLineRelativePositioning.bind(marker, new LinePortions(
                 new AbsolutePositioning(MARKER_WIDTH_START_PORTION),
                 new AbsolutePositioning(MARKER_WIDTH_END_PORTION),
                 heightPosition,
                 heightPosition
         ));
 
-        new CanvasNodeRelativePositioning(canvasDimensions).bind(label, new AbsolutePositioning(LABEL_WIDTH_PORTION), new RelativePositioning(heightPortionProperty));
+        this.canvasNodeRelativePositioning = new CanvasNodeRelativePositioning(canvasDimensions);
+        this.canvasNodeRelativePositioning.bind(label, new AbsolutePositioning(LABEL_WIDTH_PORTION), new RelativePositioning(heightPortionProperty));
     }
 
-    public ReadOnlyDoubleProperty heightPortionProperty() {
+    ReadOnlyDoubleProperty heightPortionProperty() {
         return heightPortionProperty;
     }
 
-    public void updateMarker(double portionDelta, double secondsThroughTrackDelta) {
-        heightPortionProperty.set(heightPortionProperty.get() + portionDelta);
-        secondsThroughTrack += secondsThroughTrackDelta;
+    public void setPosition(double portion) {
+        heightPortionProperty.set(portion);
+    }
+
+    public void setSeconds(double secondsThroughTrack) {
         label.setText(MusicTimestamp.format(secondsThroughTrack));
+    }
+
+    public void detach(){
+        canvasLineRelativePositioning.unbind(marker);
+        canvasNodeRelativePositioning.unbind(label);
     }
 
     Label label() {

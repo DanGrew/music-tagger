@@ -26,7 +26,7 @@ public class MtTrackScaleMarkerTest {
         TestApplication.startPlatform();
         width = new SimpleDoubleProperty();
         height = new SimpleDoubleProperty();
-        systemUnderTest = new MtTrackScaleMarker(new CanvasDimensions(width, height), 0.3, 16);
+        systemUnderTest = new MtTrackScaleMarker(new CanvasDimensions(width, height));
     }
 
     @Test public void shouldProvideMarkerAndLabel(){
@@ -35,21 +35,21 @@ public class MtTrackScaleMarkerTest {
     }
 
     @Test public void shouldUpdatePosition(){
-        assertThat(systemUnderTest.heightPortionProperty().get(), is(0.3));
-        systemUnderTest.updateMarker(0.1, 1);
-        assertThat(systemUnderTest.heightPortionProperty().get(), is(0.4));
+        assertThat(systemUnderTest.heightPortionProperty().get(), is(0.0));
+        systemUnderTest.setPosition(0.1);
+        assertThat(systemUnderTest.heightPortionProperty().get(), is(0.1));
     }
 
     @Test public void shouldUpdateLabel(){
-        assertThat(systemUnderTest.label().getText(), is("0:16"));
-        systemUnderTest.updateMarker(0.1, 5);
-        assertThat(systemUnderTest.label().getText(), is("0:21"));
+        assertThat(systemUnderTest.label().getText(), is("0:00"));
+        systemUnderTest.setSeconds(5);
+        assertThat(systemUnderTest.label().getText(), is("0:05"));
     }
 
     @Test public void shouldBePositioned(){
         NodePositioningTester nodePositioningTester = new NodePositioningTester(systemUnderTest.label(), width, height);
         nodePositioningTester.assertThatNodeTranslatesWhenWidthDimensionChanges(MtTrackScaleMarker.LABEL_WIDTH_PORTION);
-        nodePositioningTester.assertThatHeightPositionRecalculatesWhenPropertiesChange(systemUnderTest.heightPortionProperty(), value -> systemUnderTest.updateMarker(value, 1));
+        nodePositioningTester.assertThatHeightPositionRecalculatesWhenPropertiesChange(systemUnderTest.heightPortionProperty(), value -> systemUnderTest.setPosition(value));
 
         LinePositioningTester linePositioningTester = new LinePositioningTester(systemUnderTest.marker(), width, height);
         linePositioningTester.assertThatLineTranslatesWhenWidthDimensionChanges(
@@ -57,8 +57,25 @@ public class MtTrackScaleMarkerTest {
                 OptionalDouble.of(MtTrackScaleMarker.MARKER_WIDTH_END_PORTION)
         );
         linePositioningTester.assertThatPositionRecalculatesWhenHeightPropertiesChange(
-                Optional.of(systemUnderTest.heightPortionProperty()), Optional.of(value -> systemUnderTest.updateMarker(value, 1)),
-                Optional.of(systemUnderTest.heightPortionProperty()), Optional.of(value -> systemUnderTest.updateMarker(value, 1))
+                Optional.of(systemUnderTest.heightPortionProperty()), Optional.of(value -> systemUnderTest.setPosition(value)),
+                Optional.of(systemUnderTest.heightPortionProperty()), Optional.of(value -> systemUnderTest.setPosition(value))
+        );
+    }
+
+    @Test public void shouldDetach(){
+        systemUnderTest.detach();
+        NodePositioningTester nodePositioningTester = new NodePositioningTester(systemUnderTest.label(), width, height);
+        nodePositioningTester.assertThatNodeDoesNotTranslateWhenWidthDimensionChanges(MtTrackScaleMarker.LABEL_WIDTH_PORTION);
+        nodePositioningTester.assertThatHeightPositionDoesNotRecalculateWhenPropertiesChange(systemUnderTest.heightPortionProperty(), value -> systemUnderTest.setPosition(value));
+
+        LinePositioningTester linePositioningTester = new LinePositioningTester(systemUnderTest.marker(), width, height);
+        linePositioningTester.assertThatLineDoesNotTranslateWhenWidthDimensionChanges(
+                OptionalDouble.of(MtTrackScaleMarker.MARKER_WIDTH_START_PORTION),
+                OptionalDouble.of(MtTrackScaleMarker.MARKER_WIDTH_END_PORTION)
+        );
+        linePositioningTester.assertThatPositionDoesNotRecalculateWhenHeightPropertiesChange(
+                Optional.of(systemUnderTest.heightPortionProperty()), Optional.of(value -> systemUnderTest.setPosition(value)),
+                Optional.of(systemUnderTest.heightPortionProperty()), Optional.of(value -> systemUnderTest.setPosition(value))
         );
     }
 }

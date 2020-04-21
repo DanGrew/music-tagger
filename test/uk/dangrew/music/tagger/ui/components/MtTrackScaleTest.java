@@ -4,8 +4,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import uk.dangrew.kode.TestCommon;
 import uk.dangrew.kode.launch.TestApplication;
+import uk.dangrew.music.tagger.main.MtTrackScaleMarkerCalculator;
 import uk.dangrew.music.tagger.main.MusicTimestamp;
 import uk.dangrew.music.tagger.main.MusicTrackConfiguration;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
@@ -16,6 +18,7 @@ import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class MtTrackScaleTest {
 
@@ -28,6 +31,7 @@ public class MtTrackScaleTest {
     @Before
     public void initialiseSystemUnderTest() {
         TestApplication.startPlatform();
+        initMocks(this);
         configuration = new MusicTrackConfiguration();
         configuration.currentPositionProperty().set(0.4);
         configuration.currentTimeProperty().set(5.0);
@@ -41,7 +45,7 @@ public class MtTrackScaleTest {
     public void shouldAdjustMarkersBasedOnCurrentPositionChange() {
         configuration.currentPositionProperty().set(0.5);
 
-        assertMarkersAreFocussedAround(0.15, -30);
+        assertMarkersAreFocussedAround(0.10, -35);
     }
 
     @Test
@@ -56,7 +60,7 @@ public class MtTrackScaleTest {
         assertMarkersAreFocussedAround(0.13, -25);
 
         configuration.currentTimeProperty().set(-1.0);
-        assertMarkersAreFocussedAround(0.11, -30);
+        assertMarkersAreFocussedAround(0.11, -35);
     }
 
     @Test

@@ -66,4 +66,42 @@ public class CanvasNodeRelativePositioningTest {
         //no easy to test due to final methods
     }
 
+    @Test
+    public void shouldNotTranslateWhenDimensionsChangeWhenUnbound(){
+        systemUnderTest.bind(node, new AbsolutePositioning(0.4), new AbsolutePositioning(0.6));
+
+        assertThat(node.getTranslateX(), is( 0.0));
+        assertThat(node.getTranslateY(), is( 0.0));
+
+        width.set(1000.0);
+        height.set(500.0);
+        assertThat(node.getTranslateX(), is( 400.0));
+        assertThat(node.getTranslateY(), is( 300.0));
+
+        systemUnderTest.unbind(node);
+
+        width.set(100.0);
+        height.set(50.0);
+        assertThat(node.getTranslateX(), is( 400.0));
+        assertThat(node.getTranslateY(), is( 300.0));
+    }
+
+    @Test
+    public void shouldNotTranslateWhenPropertyChangesWhenUnbound(){
+        DoubleProperty widthProperty = new SimpleDoubleProperty(0.4);
+        DoubleProperty heightProperty = new SimpleDoubleProperty(0.5);
+        systemUnderTest.bind(node, new RelativePositioning(widthProperty), new RelativePositioning(heightProperty));
+
+        width.set(1000.0);
+        height.set(500.0);
+        assertThat(node.getTranslateX(), is( 400.0));
+        assertThat(node.getTranslateY(), is( 250.0));
+
+        systemUnderTest.unbind(node);
+
+        widthProperty.set(0.8);
+        heightProperty.set(0.9);
+        assertThat(node.getTranslateX(), is( 400.0));
+        assertThat(node.getTranslateY(), is( 250.0));
+    }
 }

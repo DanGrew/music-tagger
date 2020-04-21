@@ -12,17 +12,18 @@ import java.util.Optional;
  * {@link ChangeableMedia} wraps around a {@link MediaPlayer} and allows the {@link Media} to be changed, for example
  * changing the audio file, while preserving registrations for the associated information.
  */
-public class ChangeableMedia {
+public class ChangeableMedia implements ReadOnlyMedia {
 
     private final ObjectProperty<Duration> currentTimeProperty;
     private final DoubleProperty rateProperty;
+    private final BooleanProperty playingProperty;
 
     private Optional<FriendlyMediaPlayer> mediaPlayer;
 
     public ChangeableMedia() {
         this.currentTimeProperty = new SimpleObjectProperty<>();
         this.rateProperty = new SimpleDoubleProperty(1.0);
-
+        this.playingProperty = new SimpleBooleanProperty(false);
         this.mediaPlayer = Optional.empty();
     }
 
@@ -41,18 +42,30 @@ public class ChangeableMedia {
 
         currentTimeProperty.bind(mediaPlayer.get().friendly_currentTimeProperty());
         rateProperty.bind(mediaPlayer.get().friendly_rateProperty());
+        playingProperty.set(false);
     }
 
     public void play() {
         mediaPlayer.ifPresent(FriendlyMediaPlayer::friendly_play);
+        playingProperty.set(true);
     }//End Method
 
     public void pause() {
         mediaPlayer.ifPresent(FriendlyMediaPlayer::friendly_pause);
+        playingProperty.set(false);
+    }
+
+    public void togglePause() {
+        if (playingProperty.get()) {
+            pause();
+        } else {
+            play();
+        }
     }
 
     public void stop() {
         mediaPlayer.ifPresent(FriendlyMediaPlayer::friendly_stop);
+        playingProperty.set(false);
     }
 
     public void seek(Duration duration) {
@@ -67,6 +80,7 @@ public class ChangeableMedia {
         return currentTimeProperty.get();
     }
 
+    @Override
     public ReadOnlyObjectProperty<Duration> currentTimeProperty() {
         return currentTimeProperty;
     }
@@ -75,8 +89,13 @@ public class ChangeableMedia {
         return rateProperty.get();
     }
 
+    @Override
     public ReadOnlyDoubleProperty rateProperty() {
         return rateProperty;
     }
 
+    @Override
+    public ReadOnlyBooleanProperty playingProperty() {
+        return playingProperty;
+    }
 }

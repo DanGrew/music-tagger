@@ -1,9 +1,6 @@
 package uk.dangrew.music.tagger.main;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.util.Duration;
 import org.junit.Before;
@@ -182,6 +179,47 @@ public class ChangeableMediaTest {
         rateMp1.set(2.1);
 
         verify(listener).changed(any(), any(), eq(Double.valueOf(2.1)));
+    }
+
+    @Test public void shouldProvidePlayingProperty(){
+        assertThat(systemUnderTest.playingProperty().get(), is(false));
+
+        systemUnderTest.changeMedia(mediaPlayer1);
+
+        systemUnderTest.play();
+        assertThat(systemUnderTest.playingProperty().get(), is(true));
+
+        systemUnderTest.changeMedia(mediaPlayer2);
+        assertThat(systemUnderTest.playingProperty().get(), is(false));
+
+        systemUnderTest.play();
+        assertThat(systemUnderTest.playingProperty().get(), is(true));
+    }
+
+    @Test public void shouldRespondToPlaying(){
+        ChangeListener<Boolean> listener = mock(ChangeListener.class);
+        systemUnderTest.playingProperty().addListener(listener);
+
+        systemUnderTest.changeMedia(mediaPlayer1);
+        systemUnderTest.play();
+
+        verify(listener).changed(any(), any(), eq(true));
+    }
+
+    @Test public void shouldControlPlayingProperty(){
+        assertThat(systemUnderTest.playingProperty().get(), is(false));
+        systemUnderTest.play();
+        assertThat(systemUnderTest.playingProperty().get(), is(true));
+        systemUnderTest.stop();
+        assertThat(systemUnderTest.playingProperty().get(), is(false));
+        systemUnderTest.togglePause();
+        assertThat(systemUnderTest.playingProperty().get(), is(true));
+        systemUnderTest.togglePause();
+        assertThat(systemUnderTest.playingProperty().get(), is(false));
+        systemUnderTest.togglePause();
+        assertThat(systemUnderTest.playingProperty().get(), is(true));
+        systemUnderTest.pause();
+        assertThat(systemUnderTest.playingProperty().get(), is(false));
     }
 
 }

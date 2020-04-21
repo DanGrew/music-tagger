@@ -1,12 +1,16 @@
 package uk.dangrew.music.tagger.ui.positioning;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 /**
  * {@link CanvasNodeRelativePositioning} provides a method of positioning {@link Node}s on a conceptual canvas based on {@link PortionProvider}s.
@@ -14,33 +18,60 @@ import java.util.Map.Entry;
 public class CanvasNodeRelativePositioning {
 
     private final CanvasDimensions canvasDimensions;
-    private final Map<Region, Pair<PortionProvider, PortionProvider>> regionAlignments;
+    private final Map<Region, NodePortions> regionAlignments;
+    private final Map<NodePortions, List<Consumer<Double>>> registrations;
 
     public CanvasNodeRelativePositioning(
             CanvasDimensions canvasDimensions
     ) {
         this.canvasDimensions = canvasDimensions;
         this.regionAlignments = new LinkedHashMap<>();
+        this.registrations = new LinkedHashMap<>();
 
         this.canvasDimensions.registerForWidthChange(this::handleWidthChange);
         this.canvasDimensions.registerForHeightChange(this::handleHeightChange);
     }
 
     public void bind(Region node, PortionProvider portionOfWidth, PortionProvider portionOfHeight) {
-        regionAlignments.put(node, new Pair<>(portionOfWidth, portionOfHeight));
-        portionOfWidth.registerForUpdates(update -> recalculateWidth(portionOfWidth, node));
-        portionOfHeight.registerForUpdates(update -> recalculateHeight(portionOfHeight, node));
+        bind(node, new NodePortions(portionOfWidth, portionOfHeight));
+    }
+
+    public void bind(Region node, NodePortions nodePortions){
+        if ( regionAlignments.containsKey(node)){
+            return;
+        }
+        regionAlignments.put(node, nodePortions);
+
+        List<Consumer<Double>> linePortionRegistrations = registrations.computeIfAbsent(nodePortions, functions -> new ArrayList<>());
+        Consumer<Double> widthRegistration = update -> recalculateWidth(nodePortions.getWidthProportion(), node);
+        Consumer<Double> heightRegistration = update -> recalculateHeight(nodePortions.getHeightProportion(), node);
+        linePortionRegistrations.add(widthRegistration);
+        linePortionRegistrations.add(heightRegistration);
+
+        nodePortions.getWidthProportion().registerForUpdates(widthRegistration);
+        nodePortions.getHeightProportion().registerForUpdates(heightRegistration);
+    }
+
+    public void unbind(Region node) {
+        if ( !regionAlignments.containsKey(node)){
+            return;
+        }
+
+        NodePortions nodePortions = regionAlignments.remove(node);
+        List<Consumer<Double>> nodePortionRegistrations = registrations.remove(nodePortions);
+        nodePortions.getWidthProportion().unregister(nodePortionRegistrations.get(0));
+        nodePortions.getHeightProportion().unregister(nodePortionRegistrations.get(1));
     }
 
     private void handleWidthChange(double widthDelta) {
-        for (Entry<Region, Pair<PortionProvider, PortionProvider>> entry : regionAlignments.entrySet()) {
-            recalculateWidth(entry.getValue().getKey(), entry.getKey());
+        for (Entry<Region, NodePortions> entry : regionAlignments.entrySet()) {
+            recalculateWidth(entry.getValue().getWidthProportion(), entry.getKey());
         }
     }
 
     private void handleHeightChange(double heightDelta) {
-        for (Entry<Region, Pair<PortionProvider, PortionProvider>> entry : regionAlignments.entrySet()) {
-            recalculateHeight(entry.getValue().getValue(), entry.getKey());
+        for (Entry<Region, NodePortions> entry : regionAlignments.entrySet()) {
+            recalculateHeight(entry.getValue().getHeightProportion(), entry.getKey());
         }
 
     }
@@ -62,5 +93,4 @@ public class CanvasNodeRelativePositioning {
         yTranslation -= region.getHeight() / 2;
         region.setTranslateY(yTranslation);
     }
-
 }

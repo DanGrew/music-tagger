@@ -6,7 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import uk.dangrew.kode.launch.TestApplication;
+import uk.dangrew.music.tagger.main.ChangeableMedia;
 import uk.dangrew.music.tagger.main.MusicController;
+import uk.dangrew.music.tagger.main.MusicTrack;
 import uk.dangrew.music.tagger.main.MusicTrackConfiguration;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.LinePositioningTester;
@@ -15,6 +17,7 @@ import java.util.OptionalDouble;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class MusicTrackUiTest {
@@ -31,6 +34,7 @@ public class MusicTrackUiTest {
         TestApplication.startPlatform();
         initMocks(this);
         configuration = new MusicTrackConfiguration();
+        when(controller.getMedia()).thenReturn(new ChangeableMedia());
         systemUnderTest = new MusicTrackUi(
                 new CanvasDimensions(width = new SimpleDoubleProperty(), height = new SimpleDoubleProperty()),
                 controller,
