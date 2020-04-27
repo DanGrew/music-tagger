@@ -1,8 +1,7 @@
 package uk.dangrew.music.tagger.ui.components;
 
 import javafx.scene.layout.Pane;
-import uk.dangrew.music.tagger.main.MusicController;
-import uk.dangrew.music.tagger.main.MusicTrackConfiguration;
+import uk.dangrew.music.tagger.main.*;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 
 /**
@@ -10,9 +9,13 @@ import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
  */
 public class MusicTrackEditor extends Pane {
 
-    public MusicTrackEditor(MusicController musicController, MusicTrackConfiguration configuration) {
+    public MusicTrackEditor(MusicTrack musicTrack, MusicController musicController, MusicTrackState musicTrackState) {
         CanvasDimensions canvasDimensions = new CanvasDimensions(widthProperty(), heightProperty());
 
-        this.getChildren().add(new MusicTrackUi(canvasDimensions, musicController, configuration));
+        new TagCapture(musicTrack, musicTrackState);
+        this.getChildren().add(new TagPaneUi(musicTrack, canvasDimensions, musicTrackState));
+        this.getChildren().add(new MusicTrackUi(canvasDimensions, musicController, musicTrackState));
+        this.getChildren().add(new MusicTrackConfigurationUi(musicTrackState, canvasDimensions));
+        this.getChildren().add(new ZoomControlUi(musicTrackState, canvasDimensions));
     }
 }

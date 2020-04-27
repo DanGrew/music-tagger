@@ -1,23 +1,27 @@
 package uk.dangrew.music.tagger.main;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 /**
- * {@link MusicTrackConfiguration} provides the system configuration that enables the model to communicate with the ui.
+ * {@link MusicTrackState} provides the system configuration that enables the model to communicate with the ui.
  */
-public class MusicTrackConfiguration {
+public class MusicTrackState {
 
     private final DoubleProperty currentTimeProperty;
     private final DoubleProperty currentPositionProperty;
     private final DoubleProperty scalePositionIntervalProperty;
     private final DoubleProperty scaleTimeIntervalProperty;
+    private final BooleanProperty recordingProperty;
 
-    public MusicTrackConfiguration() {
-        this.currentPositionProperty = new SimpleDoubleProperty(0.2);
+    public MusicTrackState() {
+        this.currentPositionProperty = new SimpleDoubleProperty(0.4);
         this.currentTimeProperty = new SimpleDoubleProperty(0.0);
-        this.scalePositionIntervalProperty = new SimpleDoubleProperty(0.05);
-        this.scaleTimeIntervalProperty = new SimpleDoubleProperty(5);
+        this.scalePositionIntervalProperty = new SimpleDoubleProperty(0.1);
+        this.scaleTimeIntervalProperty = new SimpleDoubleProperty(1);
+        this.recordingProperty = new SimpleBooleanProperty(false);
     }
 
     public DoubleProperty currentPositionProperty() {
@@ -34,5 +38,9 @@ public class MusicTrackConfiguration {
 
     public DoubleProperty scaleTimeIntervalProperty() {
         return scaleTimeIntervalProperty;
+    }
+
+    public BooleanProperty recordingProperty() {
+        return recordingProperty;
     }
 }

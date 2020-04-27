@@ -2,7 +2,7 @@ package uk.dangrew.music.tagger.ui.components;
 
 import javafx.scene.layout.Pane;
 import uk.dangrew.music.tagger.main.MtTrackScaleMarkerCalculator;
-import uk.dangrew.music.tagger.main.MusicTrackConfiguration;
+import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 
 import java.util.*;
@@ -17,24 +17,24 @@ public class MtTrackScale extends Pane {
     static final double SECONDS_PER_MARKER = 5;
 
     private final CanvasDimensions canvasDimensions;
-    private final MusicTrackConfiguration configuration;
+    private final MusicTrackState musicTrackState;
     private final MtTrackScaleMarkerCalculator positionCalculator;
 
     private final List<MtTrackScaleMarker> markers;
 
-    public MtTrackScale(CanvasDimensions canvasDimensions, MusicTrackConfiguration configuration) {
+    public MtTrackScale(CanvasDimensions canvasDimensions, MusicTrackState musicTrackState) {
         this.canvasDimensions = canvasDimensions;
-        this.configuration = configuration;
-        this.positionCalculator = new MtTrackScaleMarkerCalculator(configuration);
+        this.musicTrackState = musicTrackState;
+        this.positionCalculator = new MtTrackScaleMarkerCalculator(musicTrackState);
 
         this.markers = new ArrayList<>();
         this.plotMarkers();
         this.updateMarkers();
 
-        configuration.currentPositionProperty().addListener((s, o, n) -> {
+        musicTrackState.currentPositionProperty().addListener((s, o, n) -> {
             updateMarkers();
         });
-        configuration.currentTimeProperty().addListener((s, o, n) -> {
+        musicTrackState.currentTimeProperty().addListener((s, o, n) -> {
             updateMarkers();
         });
     }
@@ -43,27 +43,42 @@ public class MtTrackScale extends Pane {
         getChildren().clear();
         markers.forEach(MtTrackScaleMarker::detach);
         markers.clear();
+        updateMarkerCount();
+    }
 
-        double numberOfMarkers = (MtCurrentPosition.MAXIMUM_POSITION - MtCurrentPosition.MINIMUM_POSITION) / configuration.scalePositionIntervalProperty().get();
-
-        for (int markerIndex = 0; markerIndex < numberOfMarkers; markerIndex++) {
-            MtTrackScaleMarker marker = new MtTrackScaleMarker(canvasDimensions);
-            markers.add(marker);
-            getChildren().add(marker);
+    private void updateMarkerCount(){
+        double numberOfMarkers = (MtCurrentPosition.MAXIMUM_POSITION - MtCurrentPosition.MINIMUM_POSITION) / musicTrackState.scalePositionIntervalProperty().get();
+        double heightPortionOffset = positionCalculator.calculateCurrentMarkerPositionOffset();
+        numberOfMarkers = Math.floor(numberOfMarkers + heightPortionOffset);
+        if ( numberOfMarkers > markers.size() ) {
+            for (int markerIndex = markers.size(); markerIndex < numberOfMarkers; markerIndex++) {
+                MtTrackScaleMarker marker = new MtTrackScaleMarker(canvasDimensions);
+                markers.add(marker);
+                getChildren().add(marker);
+            }
+        } else if (numberOfMarkers < markers.size() ){
+            double markersToRemove = markers.size() - numberOfMarkers;
+            for (int markerIndex = 0; markerIndex < markersToRemove; markerIndex++){
+                MtTrackScaleMarker marker = markers.remove(markers.size() -1 );
+                marker.detach();
+                getChildren().remove(marker);
+            }
         }
     }
 
     private void updateMarkers(){
+        updateMarkerCount();
+
         double heightPortionOffset = positionCalculator.calculateCurrentMarkerPositionOffset();
         double scaleStartSeconds = positionCalculator.calculateScaleStartSeconds();
 
         for (int markerIndex = 0; markerIndex < markers().size(); markerIndex++) {
             MtTrackScaleMarker marker = markers.get(markerIndex);
 
-            double heightPortion = MtCurrentPosition.MINIMUM_POSITION + (markerIndex * configuration.scalePositionIntervalProperty().get()) + heightPortionOffset;
+            double heightPortion = MtCurrentPosition.MINIMUM_POSITION + (markerIndex * musicTrackState.scalePositionIntervalProperty().get()) + heightPortionOffset;
             marker.setPosition(heightPortion);
 
-            double markerSeconds = scaleStartSeconds + (markerIndex * configuration.scaleTimeIntervalProperty().get());
+            double markerSeconds = scaleStartSeconds + (markerIndex * musicTrackState.scaleTimeIntervalProperty().get());
             marker.setSeconds(markerSeconds);
         }
     }

@@ -15,12 +15,12 @@ public class MtTrackScaleMarkerCalculatorTest {
 
     private static final double CUSTOM_PRECISION = 0.00001;
 
-    private MusicTrackConfiguration configuration;
+    private MusicTrackState configuration;
     private MtTrackScaleMarkerCalculator systemUnderTest;
 
     @Before
     public void initialiseSystemUnderTest() {
-        configuration = new MusicTrackConfiguration();
+        configuration = new MusicTrackState();
         systemUnderTest = new MtTrackScaleMarkerCalculator(configuration);
     }
 
@@ -51,6 +51,7 @@ public class MtTrackScaleMarkerCalculatorTest {
                 new Object[]{5.0, 0.2, 5.0, 0.05, 0.0},
                 new Object[]{5.08, 0.2, 5.0, 0.05, 0.0492},
                 new Object[]{5.2, 0.2, 5.0, 0.05, 0.048},
+                new Object[]{0, 0.2, 5.0, 0.05 * 0.8, 0.02},
         };
     }//End Method
 
@@ -113,7 +114,6 @@ public class MtTrackScaleMarkerCalculatorTest {
 
                  /* 3s in, 1s position offset, 10s interval, for 10% height */
                 new Object[]{3.0, 0.25, 10.0, 0.1, -10},
-
         };
     }//End Method
 

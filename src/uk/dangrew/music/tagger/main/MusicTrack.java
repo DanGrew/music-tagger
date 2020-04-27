@@ -13,8 +13,8 @@ import uk.dangrew.kode.observable.PrivatelyModifiableObservableListImpl;
 public class MusicTrack {
 
     private final ChangeableMedia mediaPlayer;
-    private final ObservableList<MusicTimestamp> tags;
-    private final ObservableList<MusicTimestamp> publicTags;
+    private final ObservableList<Tag> tags;
+    private final ObservableList<Tag> publicTags;
 
     public MusicTrack() {
         this.mediaPlayer = new ChangeableMedia();
@@ -23,10 +23,10 @@ public class MusicTrack {
     }
 
     public void tag(MusicTimestamp musicTimestamp) {
-        this.tags.add(musicTimestamp);
+        this.tags.add(new Tag(musicTimestamp));
     }
 
-    public ObservableList<MusicTimestamp> getTags() {
+    public ObservableList<Tag> getTags() {
         return publicTags;
     }
 

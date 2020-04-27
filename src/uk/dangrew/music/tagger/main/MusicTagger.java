@@ -26,8 +26,14 @@ public class MusicTagger extends Application {
 
     static final String TITLE = "Music Tagger";
 
+    private static KeyBoardCapture KEY_BOARD_CAPTURE;
+
     public MusicTagger() {
     }//End Constructor
+
+    public static KeyBoardCapture keyBoard() {
+        return KEY_BOARD_CAPTURE;
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -38,19 +44,23 @@ public class MusicTagger extends Application {
         });
 
         MusicTrack musicTrack = new MusicTrack();
-        musicTrack.mediaPlayer().changeMedia(new FriendlyMediaPlayer(new Media(new File("/Users/Amelia/Music/Amazon Music/twenty one pilots/Blurryface/01-06- Lane Boy.mp3").toURI().toString())));
-        musicTrack.tag(new MusicTimestamp(90));
-        musicTrack.tag(new MusicTimestamp(120));
-        MusicController musicController = new MusicController(musicTrack.mediaPlayer());
-        MusicTrackConfiguration configuration = new MusicTrackConfiguration();
+        MusicTrackState musicTrackState = new MusicTrackState();
+
+        BorderPane wrapper = new BorderPane();
+        wrapper.setTop(new MtMenuBar(musicTrack));
+        Scene scene = new Scene(wrapper);
+        KEY_BOARD_CAPTURE = new KeyBoardCapture(scene);
+        stage.setScene(scene);
+
+        musicTrack.mediaPlayer().useMediaFile(new File("/Users/Amelia/Music/Amazon Music/twenty one pilots/Blurryface/01-06- Lane Boy.mp3").toURI().toString());
+        MusicController musicController = new MusicController(musicTrack.mediaPlayer(), musicTrackState);
 
         musicTrack.mediaPlayer().currentTimeProperty().addListener((s, o, n) -> {
-            configuration.currentTimeProperty().setValue(n.toSeconds());
+            musicTrackState.currentTimeProperty().setValue(n.toSeconds());
         });
 
-        BorderPane wrapper = new BorderPane(new MusicTrackEditor(musicController, configuration));
-        wrapper.setTop(new MtMenuBar(musicTrack));
-        stage.setScene(new Scene(wrapper));
+        MusicTrackEditor editor = new MusicTrackEditor(musicTrack, musicController, musicTrackState);
+        wrapper.setCenter(editor);
         stage.setMaximized(true);
         stage.show();
     }//End Method

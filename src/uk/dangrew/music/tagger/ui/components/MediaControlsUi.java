@@ -9,8 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import uk.dangrew.kode.javafx.style.JavaFxStyle;
-import uk.dangrew.music.tagger.main.MusicController;
-import uk.dangrew.music.tagger.main.MusicTimestamp;
+import uk.dangrew.music.tagger.main.*;
 import uk.dangrew.music.tagger.ui.positioning.AbsolutePositioning;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.CanvasNodeRelativePositioning;
@@ -23,8 +22,13 @@ public class MediaControlsUi extends GridPane {
     static final String PLAY_TEXT = "Play";
     static final String PAUSE_TEXT = "Pause";
 
+    static final String RECORD_TEXT = "Record";
+    static final String STOP_RECORDING_TEXT = "Stop Recording";
+
     static final double WIDTH_PORTION = 0.5;
-    static final double HEIGHT_PORTION = 0.07;
+    static final double HEIGHT_PORTION = 0.05;
+
+    private final ReadOnlyMedia musicTrack;
 
     private final Button play;
     private final Button stop;
@@ -33,44 +37,67 @@ public class MediaControlsUi extends GridPane {
     private final Button speedUp;
     private final Button slowDown;
 
+    private final Button recordButton;
+
     private final Label currentTimeLabel;
 
-    public MediaControlsUi(CanvasDimensions canvasDimensions, MusicController musicController){
+    public MediaControlsUi(CanvasDimensions canvasDimensions, MusicController musicController, MusicTrackState musicTrackState){
+        this.musicTrack = musicController.getMedia();
+
         CanvasNodeRelativePositioning canvasNodeRelativePositioning = new CanvasNodeRelativePositioning(canvasDimensions);
         canvasNodeRelativePositioning.bind(this, new AbsolutePositioning(WIDTH_PORTION), new AbsolutePositioning(HEIGHT_PORTION));
 
-        this.play = new Button("Play");
+        this.play = new Button(PLAY_TEXT);
         this.play.setOnAction(event -> musicController.togglePause());
+        this.play.setFocusTraversable(false);
         this.stop = new Button("Stop");
         this.stop.setOnAction(event -> musicController.stop());
+        this.stop.setFocusTraversable(false);
         this.plus30 = new Button("+30s");
         this.plus30.setOnAction(event -> musicController.plus30());
+        this.plus30.setFocusTraversable(false);
         this.minus30 = new Button("-30s");
         this.minus30.setOnAction(event -> musicController.minus30());
+        this.minus30.setFocusTraversable(false);
         this.speedUp = new Button(">>");
         this.speedUp.setOnAction(event -> musicController.speedUp());
+        this.speedUp.setFocusTraversable(false);
         this.slowDown = new Button("<<");
         this.slowDown.setOnAction(event -> musicController.slowDown());
+        this.slowDown.setFocusTraversable(false);
 
         int column = 0;
-        add(slowDown, column++, 0);
-        add(minus30, column++, 0);
-        add(play, column++, 0);
-        add(stop, column++, 0);
-        add(plus30, column++, 0);
-        add(speedUp, column++, 0);
+        this.add(slowDown, column++, 0);
+        this.add(minus30, column++, 0);
+        this.add(play, column++, 0);
+        this.add(stop, column++, 0);
+        this.add(plus30, column++, 0);
+        this.add(speedUp, column++, 0);
 
-        currentTimeLabel = new Label("0:00");
-        currentTimeLabel.setTextAlignment(TextAlignment.CENTER);
-        currentTimeLabel.setAlignment(Pos.CENTER);
-        currentTimeLabel.setBorder(new JavaFxStyle().borderFor(Color.BLACK, 1));
-        currentTimeLabel.setMaxWidth(Double.MAX_VALUE);
-        add(currentTimeLabel, 0, 1);
+        this.recordButton = new Button(RECORD_TEXT);
+        this.recordButton.setFocusTraversable(false);
+        this.recordButton.setTextAlignment(TextAlignment.CENTER);
+        this.recordButton.setAlignment(Pos.CENTER);
+        this.recordButton.setMaxWidth(Double.MAX_VALUE);
+        this.recordButton.setOnAction(event -> musicController.toggleRecording());
+        add(recordButton, 0, 1);
+        GridPane.setColumnSpan(recordButton, column);
+        GridPane.setHalignment(recordButton, HPos.CENTER);
+
+        this.currentTimeLabel = new Label("Unknown");
+        this.currentTimeLabel.setTextAlignment(TextAlignment.CENTER);
+        this.currentTimeLabel.setAlignment(Pos.CENTER);
+        this.currentTimeLabel.setBorder(new JavaFxStyle().borderFor(Color.BLACK, 1));
+        this.currentTimeLabel.setMaxWidth(Double.MAX_VALUE);
+        this.add(currentTimeLabel, 0, 2);
         GridPane.setColumnSpan(currentTimeLabel, column);
         GridPane.setHalignment(currentTimeLabel, HPos.CENTER);
 
         musicController.getMedia().playingProperty().addListener( (s, o, n) -> handlePlayingChange(n));
-        musicController.getMedia().currentTimeProperty().addListener( (s, o, n) -> handleCurrentTimeChange(n));
+        musicController.getMedia().currentTimeProperty().addListener( (s, o, n) -> handleCurrentTimeChange());
+        musicController.getMedia().rateProperty().addListener( (s, o, n) -> handleCurrentTimeChange());
+
+        musicTrackState.recordingProperty().addListener((s, o, n) -> handleRecordingEnablement(n));
     }
 
     private void handlePlayingChange(boolean isPlaying){
@@ -81,8 +108,24 @@ public class MediaControlsUi extends GridPane {
         }
     }
 
-    private void handleCurrentTimeChange(Duration currentTime){
-        currentTimeLabel.setText(MusicTimestamp.format(currentTime.toSeconds()));
+    private void handleCurrentTimeChange(){
+        currentTimeLabel.setText(
+                MusicTimestamp.format(musicTrack.currentTimeProperty().get().toSeconds()) + " at " + musicTrack.rateProperty().get() + "x");
+    }
+
+    private void handleRecordingEnablement(boolean isRecording){
+        play.setDisable(isRecording);
+        stop.setDisable(isRecording);
+        plus30.setDisable(isRecording);
+        minus30.setDisable(isRecording);
+        speedUp.setDisable(isRecording);
+        slowDown.setDisable(isRecording);
+
+        if ( isRecording) {
+            recordButton.setText(STOP_RECORDING_TEXT);
+        } else {
+            recordButton.setText(RECORD_TEXT);
+        }
     }
 
     Button play() {
@@ -111,5 +154,9 @@ public class MediaControlsUi extends GridPane {
 
     Label currentTime() {
         return currentTimeLabel;
+    }
+
+    Button record(){
+        return recordButton;
     }
 }

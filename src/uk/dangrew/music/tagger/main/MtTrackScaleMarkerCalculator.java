@@ -5,12 +5,12 @@ import uk.dangrew.music.tagger.ui.components.MtCurrentPosition;
 
 public class MtTrackScaleMarkerCalculator {
 
-    private static final int MODULUS_SCALE_FACTOR = 1000000;
+    public static final int MODULUS_SCALE_FACTOR = 1000000;
 
     private final DoubleMath doubleMath;
-    private final MusicTrackConfiguration configuration;
+    private final MusicTrackState configuration;
 
-    public MtTrackScaleMarkerCalculator(MusicTrackConfiguration configuration) {
+    public MtTrackScaleMarkerCalculator(MusicTrackState configuration) {
         this.configuration = configuration;
         this.doubleMath = new DoubleMath(MODULUS_SCALE_FACTOR);
     }
@@ -22,12 +22,14 @@ public class MtTrackScaleMarkerCalculator {
         double scalePositionInterval = configuration.scalePositionIntervalProperty().get();
 
         double timeSecondsOffset = doubleMath.doubleModulus(currentTime, scaleTimeInterval);
-        double invertedSecondsOffset = scaleTimeInterval - timeSecondsOffset;
+        double invertedSecondsOffset = doubleMath.doubleSubtraction(scaleTimeInterval, timeSecondsOffset);
         double heightPortionPerSecond = doubleMath.doubleDivision(scalePositionInterval, scaleTimeInterval);
         double timePortionOffset = invertedSecondsOffset * heightPortionPerSecond;
 
-        double positionOffset = doubleMath.doubleModulus(currentPosition, scalePositionInterval);
-        double totalOffset = timePortionOffset + positionOffset;
+        double positionRangeStartToCurrent = doubleMath.doubleSubtraction(currentPosition, MtCurrentPosition.MINIMUM_POSITION );
+        double positionOffsetBasedOnCurrentWithScale = doubleMath.doubleModulus(positionRangeStartToCurrent, scalePositionInterval);
+
+        double totalOffset = timePortionOffset + positionOffsetBasedOnCurrentWithScale;
         return doubleMath.doubleModulus(totalOffset, scalePositionInterval);
     }
 

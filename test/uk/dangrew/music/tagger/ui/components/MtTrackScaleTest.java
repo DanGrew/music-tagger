@@ -4,12 +4,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import uk.dangrew.kode.TestCommon;
 import uk.dangrew.kode.launch.TestApplication;
-import uk.dangrew.music.tagger.main.MtTrackScaleMarkerCalculator;
 import uk.dangrew.music.tagger.main.MusicTimestamp;
-import uk.dangrew.music.tagger.main.MusicTrackConfiguration;
+import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 
 import java.util.List;
@@ -25,14 +23,14 @@ public class MtTrackScaleTest {
     private DoubleProperty width;
     private DoubleProperty height;
 
-    private MusicTrackConfiguration configuration;
+    private MusicTrackState configuration;
     private MtTrackScale systemUnderTest;
 
     @Before
     public void initialiseSystemUnderTest() {
         TestApplication.startPlatform();
         initMocks(this);
-        configuration = new MusicTrackConfiguration();
+        configuration = new MusicTrackState();
         configuration.currentPositionProperty().set(0.4);
         configuration.currentTimeProperty().set(5.0);
         systemUnderTest = new MtTrackScale(

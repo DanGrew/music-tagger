@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import org.junit.Before;
 import org.junit.Test;
 import uk.dangrew.kode.friendly.javafx.FriendlyMouseEvent;
-import uk.dangrew.music.tagger.main.MusicTrackConfiguration;
+import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.LinePositioningTester;
 
@@ -23,15 +23,15 @@ public class MtCurrentPositionTest {
     private DoubleProperty width;
     private DoubleProperty height;
 
-    private MusicTrackConfiguration musicTrackConfiguration;
+    private MusicTrackState musicTrackState;
     private MtCurrentPosition systemUnderTest;
 
     @Before
     public void initialiseSystemUnderTest() {
-        musicTrackConfiguration = new MusicTrackConfiguration();
+        musicTrackState = new MusicTrackState();
         systemUnderTest = new MtCurrentPosition(
                 new CanvasDimensions(width = new SimpleDoubleProperty(), height = new SimpleDoubleProperty()),
-                musicTrackConfiguration);
+                musicTrackState);
     }
 
     @Test
@@ -42,10 +42,10 @@ public class MtCurrentPositionTest {
                 OptionalDouble.of(MtCurrentPosition.WIDTH_END_PORTION)
         );
         tester.assertThatPositionRecalculatesWhenHeightPropertiesChange(
-                Optional.ofNullable(musicTrackConfiguration.currentPositionProperty()),
-                Optional.of(value -> musicTrackConfiguration.currentPositionProperty().set(value)),
-                Optional.ofNullable(musicTrackConfiguration.currentPositionProperty()),
-                Optional.of(value -> musicTrackConfiguration.currentPositionProperty().set(value))
+                Optional.ofNullable(musicTrackState.currentPositionProperty()),
+                Optional.of(value -> musicTrackState.currentPositionProperty().set(value)),
+                Optional.ofNullable(musicTrackState.currentPositionProperty()),
+                Optional.of(value -> musicTrackState.currentPositionProperty().set(value))
         );
     }
 
@@ -58,7 +58,7 @@ public class MtCurrentPositionTest {
         when(mouseEvent.getY()).thenReturn(100.0);
 
         systemUnderTest.mouseDragged(mouseEvent);
-        assertThat(musicTrackConfiguration.currentPositionProperty().get(), is(0.1));
+        assertThat(musicTrackState.currentPositionProperty().get(), is(0.1));
     }
 
 }

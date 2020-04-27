@@ -28,8 +28,8 @@ public class CanvasNodeRelativePositioning {
         this.regionAlignments = new LinkedHashMap<>();
         this.registrations = new LinkedHashMap<>();
 
-        this.canvasDimensions.registerForWidthChange(this::handleWidthChange);
-        this.canvasDimensions.registerForHeightChange(this::handleHeightChange);
+        this.canvasDimensions.registerForWidthChange(delta -> handleWidthChange());
+        this.canvasDimensions.registerForHeightChange(delta -> handleHeightChange());
     }
 
     public void bind(Region node, PortionProvider portionOfWidth, PortionProvider portionOfHeight) {
@@ -43,13 +43,17 @@ public class CanvasNodeRelativePositioning {
         regionAlignments.put(node, nodePortions);
 
         List<Consumer<Double>> linePortionRegistrations = registrations.computeIfAbsent(nodePortions, functions -> new ArrayList<>());
-        Consumer<Double> widthRegistration = update -> recalculateWidth(nodePortions.getWidthProportion(), node);
-        Consumer<Double> heightRegistration = update -> recalculateHeight(nodePortions.getHeightProportion(), node);
+        Consumer<Double> widthRegistration = update -> recalculateWidth(node, nodePortions.getWidthProportion());
+        Consumer<Double> heightRegistration = update -> recalculateHeight(node, nodePortions.getHeightProportion());
         linePortionRegistrations.add(widthRegistration);
         linePortionRegistrations.add(heightRegistration);
 
         nodePortions.getWidthProportion().registerForUpdates(widthRegistration);
         nodePortions.getHeightProportion().registerForUpdates(heightRegistration);
+
+        //note: could be a memory leak
+        node.widthProperty().addListener((s, o, n) -> widthRegistration.accept(n.doubleValue()));
+        node.heightProperty().addListener((s, o, n) -> heightRegistration.accept(n.doubleValue()));
     }
 
     public void unbind(Region node) {
@@ -63,20 +67,19 @@ public class CanvasNodeRelativePositioning {
         nodePortions.getHeightProportion().unregister(nodePortionRegistrations.get(1));
     }
 
-    private void handleWidthChange(double widthDelta) {
+    private void handleWidthChange() {
         for (Entry<Region, NodePortions> entry : regionAlignments.entrySet()) {
-            recalculateWidth(entry.getValue().getWidthProportion(), entry.getKey());
+            recalculateWidth(entry.getKey(), entry.getValue().getWidthProportion());
         }
     }
 
-    private void handleHeightChange(double heightDelta) {
+    private void handleHeightChange() {
         for (Entry<Region, NodePortions> entry : regionAlignments.entrySet()) {
-            recalculateHeight(entry.getValue().getHeightProportion(), entry.getKey());
+            recalculateHeight(entry.getKey(), entry.getValue().getHeightProportion());
         }
-
     }
 
-    private void recalculateWidth(PortionProvider portionProvider, Region region){
+    private void recalculateWidth(Region region, PortionProvider portionProvider){
         if (portionProvider == null) {
             return;
         }
@@ -85,7 +88,7 @@ public class CanvasNodeRelativePositioning {
         region.setTranslateX(xTranslation);
     }
 
-    private void recalculateHeight(PortionProvider portionProvider, Region region){
+    private void recalculateHeight(Region region, PortionProvider portionProvider){
         if (portionProvider == null) {
             return;
         }

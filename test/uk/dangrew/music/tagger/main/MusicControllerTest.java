@@ -6,7 +6,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import uk.dangrew.kode.TestCommon;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.closeTo;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.doubleThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
@@ -15,12 +18,14 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class MusicControllerTest {
 
+    private MusicTrackState musicTrackState;
     @Mock private ChangeableMedia musicTrack;
     private MusicController systemUnderTest;
 
     @Before public void initialiseSystemUnderTest(){
         initMocks(this);
-        systemUnderTest = new MusicController(musicTrack);
+        musicTrackState = new MusicTrackState();
+        systemUnderTest = new MusicController(musicTrack, musicTrackState);
     }
 
     @Test
@@ -73,4 +78,10 @@ public class MusicControllerTest {
         verify(musicTrack).setRate(doubleThat(closeTo(2.1, TestCommon.precision())));
     }
 
+    @Test public void shouldToggleRecording(){
+        systemUnderTest.toggleRecording();
+        assertThat(musicTrackState.recordingProperty().get(), is(true));
+        systemUnderTest.toggleRecording();
+        assertThat(musicTrackState.recordingProperty().get(), is(false));
+    }
 }

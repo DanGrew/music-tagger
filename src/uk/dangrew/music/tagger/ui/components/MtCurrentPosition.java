@@ -3,7 +3,7 @@ package uk.dangrew.music.tagger.ui.components;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import uk.dangrew.kode.friendly.javafx.FriendlyMouseEvent;
-import uk.dangrew.music.tagger.main.MusicTrackConfiguration;
+import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.ui.positioning.*;
 
 /**
@@ -18,15 +18,15 @@ public class MtCurrentPosition extends Line {
     public static final double WIDTH_END_PORTION = 0.7;
 
     private final CanvasDimensions canvasDimensions;
-    private final MusicTrackConfiguration musicTrackConfiguration;
+    private final MusicTrackState musicTrackState;
 
     public MtCurrentPosition(
             CanvasDimensions canvasDimensions,
-            MusicTrackConfiguration configuration
+            MusicTrackState configuration
     ) {
         super(0, 0, 0, 0);
         this.canvasDimensions = canvasDimensions;
-        this.musicTrackConfiguration = configuration;
+        this.musicTrackState = configuration;
 
         this.setStroke(Color.BLUE);
         this.setStrokeWidth(5);
@@ -46,6 +46,6 @@ public class MtCurrentPosition extends Line {
     void mouseDragged(FriendlyMouseEvent event) {
         double height = canvasDimensions.height();
         double portionAdjusted = event.getY() / height;
-        musicTrackConfiguration.currentPositionProperty().set(portionAdjusted);
+        musicTrackState.currentPositionProperty().set(portionAdjusted);
     }
 }

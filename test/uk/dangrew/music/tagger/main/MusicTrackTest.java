@@ -22,8 +22,8 @@ public class MusicTrackTest {
         systemUnderTest.tag(new MusicTimestamp(90));
 
         assertThat(systemUnderTest.getTags(), hasSize(2));
-        assertThat(systemUnderTest.getTags().get(0).seconds(), is(30.0));
-        assertThat(systemUnderTest.getTags().get(1).seconds(), is(90.0));
+        assertThat(systemUnderTest.getTags().get(0).getMusicTimestamp().seconds(), is(30.0));
+        assertThat(systemUnderTest.getTags().get(1).getMusicTimestamp().seconds(), is(90.0));
     }
 
 }

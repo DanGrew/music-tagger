@@ -117,4 +117,22 @@ public class CanvasLineRelativePositioningTest {
         assertThat(line.getEndY(), is(250.0));
     }
 
+    @Test public void shouldCalculateLineCoordinatesOnRegistration(){
+        width.set(1000);
+        height.set(500);
+
+        Line line = new Line();
+        systemUnderTest.bind(line, new LinePortions(
+                new AbsolutePositioning(0.7),
+                new AbsolutePositioning(0.95),
+                new AbsolutePositioning(0.4),
+                new AbsolutePositioning(0.6)
+        ));
+
+        assertThat(line.getStartX(), is( 700.0));
+        assertThat(line.getEndX(), is( 950.0));
+        assertThat(line.getStartY(), is( 200.0));
+        assertThat(line.getEndY(), is( 300.0));
+    }
+
 }

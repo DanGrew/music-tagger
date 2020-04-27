@@ -49,6 +49,11 @@ public class CanvasLineRelativePositioning {
         portionProvider.getEndWidthProvider().registerForUpdates(widthEndRegistration);
         portionProvider.getStartHeightProvider().registerForUpdates(heightStartRegistration);
         portionProvider.getEndHeightProvider().registerForUpdates(heightEndRegistration);
+
+        recalculateWidthStart(node, portionProvider);
+        recalculateWidthEnd(node, portionProvider);
+        recalculateHeightStart(node, portionProvider);
+        recalculateHeightEnd(node, portionProvider);
     }
 
     public void unbind(Line line) {

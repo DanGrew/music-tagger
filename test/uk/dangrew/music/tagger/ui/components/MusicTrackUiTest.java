@@ -8,8 +8,7 @@ import org.mockito.Mock;
 import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.music.tagger.main.ChangeableMedia;
 import uk.dangrew.music.tagger.main.MusicController;
-import uk.dangrew.music.tagger.main.MusicTrack;
-import uk.dangrew.music.tagger.main.MusicTrackConfiguration;
+import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.LinePositioningTester;
 
@@ -25,7 +24,7 @@ public class MusicTrackUiTest {
     private DoubleProperty width;
     private DoubleProperty height;
 
-    private MusicTrackConfiguration configuration;
+    private MusicTrackState configuration;
     @Mock private MusicController controller;
     private MusicTrackUi systemUnderTest;
 
@@ -33,7 +32,7 @@ public class MusicTrackUiTest {
     public void initialiseSystemUnderTest() {
         TestApplication.startPlatform();
         initMocks(this);
-        configuration = new MusicTrackConfiguration();
+        configuration = new MusicTrackState();
         when(controller.getMedia()).thenReturn(new ChangeableMedia());
         systemUnderTest = new MusicTrackUi(
                 new CanvasDimensions(width = new SimpleDoubleProperty(), height = new SimpleDoubleProperty()),
@@ -43,7 +42,7 @@ public class MusicTrackUiTest {
     }
 
     @Test
-    public void shouldBePositioning() {
+    public void shouldBePositioned() {
         LinePositioningTester tester = new LinePositioningTester(systemUnderTest.skeleton(), width, height);
         tester.assertThatLineTranslatesWhenWidthDimensionChanges(
                 OptionalDouble.of(MusicTrackUi.WIDTH_PORTION),
@@ -53,10 +52,32 @@ public class MusicTrackUiTest {
                 OptionalDouble.of(MusicTrackUi.START_HEIGHT_PORTION),
                 OptionalDouble.of(MusicTrackUi.END_HEIGHT_PORTION)
         );
+
+        tester = new LinePositioningTester(systemUnderTest.leftHook(), width, height);
+        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+                OptionalDouble.of(MusicTrackUi.MARKER_WIDTH_START_PORTION),
+                OptionalDouble.of(MusicTrackUi.MARKER_WIDTH_START_PORTION)
+        );
+        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+                OptionalDouble.of(MusicTrackUi.START_HEIGHT_PORTION),
+                OptionalDouble.of(MusicTrackUi.END_HEIGHT_PORTION)
+        );
+
+        tester = new LinePositioningTester(systemUnderTest.rightHook(), width, height);
+        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+                OptionalDouble.of(MusicTrackUi.MARKER_WIDTH_END_PORTION),
+                OptionalDouble.of(MusicTrackUi.MARKER_WIDTH_END_PORTION)
+        );
+        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+                OptionalDouble.of(MusicTrackUi.START_HEIGHT_PORTION),
+                OptionalDouble.of(MusicTrackUi.END_HEIGHT_PORTION)
+        );
     }
 
     @Test public void shouldProvideComponents(){
         assertThat(systemUnderTest.getChildren().contains(systemUnderTest.skeleton()), is(true));
+        assertThat(systemUnderTest.getChildren().contains(systemUnderTest.leftHook()), is(true));
+        assertThat(systemUnderTest.getChildren().contains(systemUnderTest.rightHook()), is(true));
     }
 
 }

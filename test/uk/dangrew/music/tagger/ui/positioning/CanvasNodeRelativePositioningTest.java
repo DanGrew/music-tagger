@@ -3,19 +3,21 @@ package uk.dangrew.music.tagger.ui.positioning;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import org.junit.Before;
 import org.junit.Test;
 import uk.dangrew.music.tagger.ui.positioning.AbsolutePositioning;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.CanvasNodeRelativePositioning;
 import uk.dangrew.music.tagger.ui.positioning.RelativePositioning;
+import uk.dangrew.music.tagger.utility.TestRegion;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class CanvasNodeRelativePositioningTest {
 
-    private BorderPane node;
+    private Region node;
 
     private DoubleProperty width;
     private DoubleProperty height;
@@ -103,5 +105,23 @@ public class CanvasNodeRelativePositioningTest {
         heightProperty.set(0.9);
         assertThat(node.getTranslateX(), is( 400.0));
         assertThat(node.getTranslateY(), is( 250.0));
+    }
+
+    @Test public void shouldRespondToNodeWidthChange(){
+        TestRegion node = new TestRegion();
+        systemUnderTest.bind(node, new AbsolutePositioning(0.4), new AbsolutePositioning(0.6));
+
+        width.set(1000.0);
+        height.set(500.0);
+        assertThat(node.getTranslateX(), is( 400.0));
+        assertThat(node.getTranslateY(), is( 300.0));
+
+        node.setWidth(100.0);
+        assertThat(node.getTranslateX(), is( 350.0));
+        assertThat(node.getTranslateY(), is( 300.0));
+
+        node.setHeight(200.0);
+        assertThat(node.getTranslateX(), is( 350.0));
+        assertThat(node.getTranslateY(), is( 200.0));
     }
 }
