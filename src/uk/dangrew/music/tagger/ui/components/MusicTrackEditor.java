@@ -2,6 +2,12 @@ package uk.dangrew.music.tagger.ui.components;
 
 import javafx.scene.layout.Pane;
 import uk.dangrew.music.tagger.main.*;
+import uk.dangrew.music.tagger.model.MusicTrack;
+import uk.dangrew.music.tagger.ui.components.controls.MusicTrackConfigurationUi;
+import uk.dangrew.music.tagger.ui.components.controls.ZoomControlUi;
+import uk.dangrew.music.tagger.ui.components.tagging.TagCapture;
+import uk.dangrew.music.tagger.ui.components.tagging.TagPaneUi;
+import uk.dangrew.music.tagger.ui.components.track.MusicTrackUi;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 
 /**

@@ -12,9 +12,11 @@ import com.sun.javafx.application.PlatformImpl;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.media.Media;
 import javafx.stage.Stage;
-import uk.dangrew.kode.friendly.javafx.FriendlyMediaPlayer;
+import uk.dangrew.music.tagger.model.MusicTrack;
+import uk.dangrew.music.tagger.system.KeyBoardCapture;
+import uk.dangrew.music.tagger.ui.components.MtMenuBar;
+import uk.dangrew.music.tagger.ui.components.MusicController;
 import uk.dangrew.music.tagger.ui.components.MusicTrackEditor;
 
 import java.io.File;
