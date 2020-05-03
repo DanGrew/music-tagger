@@ -64,8 +64,8 @@ public class TagWidget extends Pane {
         this.getChildren().add(textField);
 
         this.textFieldWidthProperty = new SimpleDoubleProperty(0.7);
-        CanvasNodeRelativePositioning canvasNodeRelativePositioning = new CanvasNodeRelativePositioning(canvasDimensions);
-        canvasNodeRelativePositioning.bind(textField, new RelativePositioning(textFieldWidthProperty), heightPositioning);
+        CanvasRegionRelativePositioning canvasRegionRelativePositioning = new CanvasRegionRelativePositioning(canvasDimensions);
+        canvasRegionRelativePositioning.bind(textField, new RelativePositioning(textFieldWidthProperty), heightPositioning);
 
         musicTrackState.recordingProperty().addListener((s, o, n) -> textField.setDisable(n));
     }

@@ -14,7 +14,7 @@ import uk.dangrew.music.tagger.model.ReadOnlyMedia;
 import uk.dangrew.music.tagger.ui.components.MusicController;
 import uk.dangrew.music.tagger.ui.positioning.AbsolutePositioning;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
-import uk.dangrew.music.tagger.ui.positioning.CanvasNodeRelativePositioning;
+import uk.dangrew.music.tagger.ui.positioning.CanvasRegionRelativePositioning;
 
 /**
  * Part of the Ui providing the controls for the associated {@link javafx.scene.media.Media}.
@@ -46,8 +46,8 @@ public class MediaControlsUi extends GridPane {
     public MediaControlsUi(CanvasDimensions canvasDimensions, MusicController musicController, MusicTrackState musicTrackState){
         this.musicTrack = musicController.getMedia();
 
-        CanvasNodeRelativePositioning canvasNodeRelativePositioning = new CanvasNodeRelativePositioning(canvasDimensions);
-        canvasNodeRelativePositioning.bind(this, new AbsolutePositioning(WIDTH_PORTION), new AbsolutePositioning(HEIGHT_PORTION));
+        CanvasRegionRelativePositioning canvasRegionRelativePositioning = new CanvasRegionRelativePositioning(canvasDimensions);
+        canvasRegionRelativePositioning.bind(this, new AbsolutePositioning(WIDTH_PORTION), new AbsolutePositioning(HEIGHT_PORTION));
 
         this.play = new Button(PLAY_TEXT);
         this.play.setOnAction(event -> musicController.togglePause());

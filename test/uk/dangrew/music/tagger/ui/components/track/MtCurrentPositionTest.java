@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.dangrew.kode.friendly.javafx.FriendlyMouseEvent;
 import uk.dangrew.music.tagger.main.MusicTrackState;
-import uk.dangrew.music.tagger.ui.components.track.MtCurrentPosition;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.LinePositioningTester;
 
@@ -15,7 +14,7 @@ import java.util.OptionalDouble;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

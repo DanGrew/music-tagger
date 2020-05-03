@@ -60,4 +60,5 @@ public class MusicTimestamp {
     public String toString() {
         return displayString();
     }
+
 }

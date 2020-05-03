@@ -20,7 +20,7 @@ public class MtTrackScaleMarker extends Pane {
     static final double LABEL_WIDTH_PORTION = 0.3;
 
     private final CanvasLineRelativePositioning canvasLineRelativePositioning;
-    private final CanvasNodeRelativePositioning canvasNodeRelativePositioning;
+    private final CanvasRegionRelativePositioning canvasRegionRelativePositioning;
     private final DoubleProperty heightPortionProperty;
     private final Line marker;
     private final Label label;
@@ -44,8 +44,8 @@ public class MtTrackScaleMarker extends Pane {
                 heightPosition
         ));
 
-        this.canvasNodeRelativePositioning = new CanvasNodeRelativePositioning(canvasDimensions);
-        this.canvasNodeRelativePositioning.bind(label, new AbsolutePositioning(LABEL_WIDTH_PORTION), new RelativePositioning(heightPortionProperty));
+        this.canvasRegionRelativePositioning = new CanvasRegionRelativePositioning(canvasDimensions);
+        this.canvasRegionRelativePositioning.bind(label, new AbsolutePositioning(LABEL_WIDTH_PORTION), new RelativePositioning(heightPortionProperty));
     }
 
     ReadOnlyDoubleProperty heightPortionProperty() {
@@ -62,7 +62,7 @@ public class MtTrackScaleMarker extends Pane {
 
     public void detach(){
         canvasLineRelativePositioning.unbind(marker);
-        canvasNodeRelativePositioning.unbind(label);
+        canvasRegionRelativePositioning.unbind(label);
     }
 
     Label label() {

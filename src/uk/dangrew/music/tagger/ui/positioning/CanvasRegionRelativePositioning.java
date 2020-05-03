@@ -1,9 +1,7 @@
 package uk.dangrew.music.tagger.ui.positioning;
 
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,15 +11,15 @@ import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 /**
- * {@link CanvasNodeRelativePositioning} provides a method of positioning {@link Node}s on a conceptual canvas based on {@link PortionProvider}s.
+ * {@link CanvasRegionRelativePositioning} provides a method of positioning {@link Node}s on a conceptual canvas based on {@link PortionProvider}s.
  */
-public class CanvasNodeRelativePositioning {
+public class CanvasRegionRelativePositioning {
 
     private final CanvasDimensions canvasDimensions;
     private final Map<Region, NodePortions> regionAlignments;
     private final Map<NodePortions, List<Consumer<Double>>> registrations;
 
-    public CanvasNodeRelativePositioning(
+    public CanvasRegionRelativePositioning(
             CanvasDimensions canvasDimensions
     ) {
         this.canvasDimensions = canvasDimensions;

@@ -32,6 +32,10 @@ public class TagPaneUiTest {
         musicTrack = new MusicTrack();
         musicTrack.tag(new MusicTimestamp(20));
         musicTrackState = new MusicTrackState();
+        musicTrackState.currentPositionProperty().set(0.4);
+        musicTrackState.currentTimeProperty().set(5.0);
+        musicTrackState.scalePositionIntervalProperty().set(0.05);
+        musicTrackState.scaleTimeIntervalProperty().set(5);
         systemUnderTest = new TagPaneUi(musicTrack, new CanvasDimensions(width, height), musicTrackState);
     }
 
@@ -41,8 +45,8 @@ public class TagPaneUiTest {
         musicTrack.tag(new MusicTimestamp(27.0));
 
         assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(0)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(0)));
-        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(1)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(0)));
-        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(2)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(0)));
+        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(1)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(1)));
+        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(2)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(2)));
 
         musicTrackState.currentTimeProperty().set(1.0);
 

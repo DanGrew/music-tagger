@@ -6,29 +6,25 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import org.junit.Before;
 import org.junit.Test;
-import uk.dangrew.music.tagger.ui.positioning.AbsolutePositioning;
-import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
-import uk.dangrew.music.tagger.ui.positioning.CanvasNodeRelativePositioning;
-import uk.dangrew.music.tagger.ui.positioning.RelativePositioning;
 import uk.dangrew.music.tagger.utility.TestRegion;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-public class CanvasNodeRelativePositioningTest {
+public class CanvasRegionRelativePositioningTest {
 
     private Region node;
 
     private DoubleProperty width;
     private DoubleProperty height;
-    private CanvasNodeRelativePositioning systemUnderTest;
+    private CanvasRegionRelativePositioning systemUnderTest;
 
     @Before public void initialiseSystemUnderTest(){
         node = new BorderPane();
 
         width = new SimpleDoubleProperty(0.0);
         height = new SimpleDoubleProperty(0.0);
-        systemUnderTest = new CanvasNodeRelativePositioning(new CanvasDimensions(width, height));
+        systemUnderTest = new CanvasRegionRelativePositioning(new CanvasDimensions(width, height));
     }
 
     @Test

@@ -3,14 +3,20 @@ package uk.dangrew.music.tagger.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Tag {
+import java.util.Objects;
+
+public class Tag implements Comparable<Tag> {
 
     private final MusicTimestamp musicTimestamp;
     private final StringProperty textProperty;
 
-    public Tag(MusicTimestamp musicTimestamp){
+    public Tag(MusicTimestamp musicTimestamp) {
+        this(musicTimestamp, null);
+    }
+
+    public Tag(MusicTimestamp musicTimestamp, String text) {
         this.musicTimestamp = musicTimestamp;
-        this.textProperty = new SimpleStringProperty();
+        this.textProperty = new SimpleStringProperty(text);
     }
 
     public MusicTimestamp getMusicTimestamp() {
@@ -19,5 +25,23 @@ public class Tag {
 
     public StringProperty getTextProperty() {
         return textProperty;
+    }
+
+    @Override
+    public int compareTo(Tag o) {
+        int timestampCompare = Double.compare(this.musicTimestamp.seconds(), o.musicTimestamp.seconds());
+        if (timestampCompare != 0) {
+            return timestampCompare;
+        }
+
+        if ( textProperty.get() == null && o.textProperty.get() == null ){
+            return 0;
+        } else if ( textProperty.get() == null ) {
+            return -1;
+        } else if (o.textProperty.get() == null){
+            return 1;
+        }
+        int textCompare = this.textProperty.get().compareTo(o.textProperty.get());
+        return textCompare;
     }
 }

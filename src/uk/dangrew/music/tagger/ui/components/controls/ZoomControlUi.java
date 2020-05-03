@@ -6,7 +6,7 @@ import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.ui.components.track.MtCurrentPosition;
 import uk.dangrew.music.tagger.ui.positioning.AbsolutePositioning;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
-import uk.dangrew.music.tagger.ui.positioning.CanvasNodeRelativePositioning;
+import uk.dangrew.music.tagger.ui.positioning.CanvasRegionRelativePositioning;
 
 public class ZoomControlUi extends GridPane {
 
@@ -33,7 +33,7 @@ public class ZoomControlUi extends GridPane {
         this.add(zoomOut, 0, 1);
         this.zoomOut.setOnAction( event -> handleScalePositionIntervalChange(ZOOM_OUT_FACTOR));
 
-        new CanvasNodeRelativePositioning(canvasDimensions).bind(
+        new CanvasRegionRelativePositioning(canvasDimensions).bind(
                 this,
                 new AbsolutePositioning(MtCurrentPosition.WIDTH_END_PORTION),
                 new AbsolutePositioning(HEIGHT_PORTION)

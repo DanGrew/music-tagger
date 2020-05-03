@@ -24,15 +24,11 @@ public class NodePositioningTester {
     }
 
     public void assertThatNodeTranslatesWhenWidthDimensionChanges(double widthPortion){
-        assertThat(node.getTranslateX(), is( 0.0));
-
         width.set(1000.0);
         assertThat(node.getTranslateX(), is( width.get() * widthPortion));
     }
 
     public void assertThatNodeTranslatesWhenHeightDimensionChanges(double heightPortion){
-        assertThat(node.getTranslateY(), is( 0.0));
-
         height.set(500.0);
         assertThat(node.getTranslateY(), is( height.get() * heightPortion));
     }

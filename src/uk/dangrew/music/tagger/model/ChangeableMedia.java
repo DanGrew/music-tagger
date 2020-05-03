@@ -15,6 +15,7 @@ import java.util.Optional;
 public class ChangeableMedia implements ReadOnlyMedia {
 
     private final ObjectProperty<Duration> currentTimeProperty;
+    private final ObjectProperty<Duration> durationProperty;
     private final DoubleProperty rateProperty;
     private final BooleanProperty playingProperty;
 
@@ -22,9 +23,15 @@ public class ChangeableMedia implements ReadOnlyMedia {
 
     public ChangeableMedia() {
         this.currentTimeProperty = new SimpleObjectProperty<>(Duration.seconds(0));
+        this.durationProperty = new SimpleObjectProperty<>(Duration.ZERO);
         this.rateProperty = new SimpleDoubleProperty(1.0);
         this.playingProperty = new SimpleBooleanProperty(false);
         this.mediaPlayer = Optional.empty();
+    }
+
+    //do not use, just for debugging
+    public MediaPlayer getMediaPlayer(){
+        return mediaPlayer.get().getMediaPlayer();
     }
 
     public void useMediaFile(String newMedia) {
@@ -34,17 +41,20 @@ public class ChangeableMedia implements ReadOnlyMedia {
     public void changeMedia(FriendlyMediaPlayer newMediaPlayer) {
         if (mediaPlayer.isPresent()) {
             currentTimeProperty.unbind();
+            durationProperty.unbind();
             rateProperty.unbind();
         }
 
         this.mediaPlayer = Optional.ofNullable(newMediaPlayer);
         if (!mediaPlayer.isPresent()) {
             currentTimeProperty.set(Duration.seconds(0));
+            durationProperty.set(Duration.seconds(0));
             rateProperty.set(1.0);
             return;
         }
 
         currentTimeProperty.bind(mediaPlayer.get().friendly_currentTimeProperty());
+        durationProperty.bind(mediaPlayer.get().friendly_durationProperty());
         rateProperty.bind(mediaPlayer.get().friendly_rateProperty());
         playingProperty.set(false);
     }
@@ -81,13 +91,23 @@ public class ChangeableMedia implements ReadOnlyMedia {
         stop();
     }
 
-    public double rate() {
-        return rateProperty.get();
+    @Override
+    public ReadOnlyObjectProperty<Duration> currentTimeProperty() {
+        return currentTimeProperty;
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<Duration> durationProperty() {
+        return durationProperty;
     }
 
     @Override
     public ReadOnlyDoubleProperty rateProperty() {
         return rateProperty;
+    }
+
+    public double rate() {
+        return rateProperty.get();
     }
 
     @Override
@@ -97,10 +117,5 @@ public class ChangeableMedia implements ReadOnlyMedia {
 
     public Duration currentTime() {
         return currentTimeProperty.get();
-    }
-
-    @Override
-    public ReadOnlyObjectProperty<Duration> currentTimeProperty() {
-        return currentTimeProperty;
     }
 }

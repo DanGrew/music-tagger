@@ -19,9 +19,11 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class ChangeableMediaTest {
 
     private ObjectProperty<Duration> currentTimeMp1;
+    private ObjectProperty<Duration> durationMp1;
     private DoubleProperty rateMp1;
 
     private ObjectProperty<Duration> currentTimeMp2;
+    private ObjectProperty<Duration> durationMp2;
     private DoubleProperty rateMp2;
 
     @Mock private FriendlyMediaPlayer mediaPlayer1;
@@ -33,13 +35,17 @@ public class ChangeableMediaTest {
         initMocks(this);
 
         currentTimeMp1 = new SimpleObjectProperty<>();
+        durationMp1 = new SimpleObjectProperty<>();
         rateMp1 = new SimpleDoubleProperty();
         currentTimeMp2 = new SimpleObjectProperty<>();
+        durationMp2 = new SimpleObjectProperty<>();
         rateMp2 = new SimpleDoubleProperty();
 
         when(mediaPlayer1.friendly_currentTimeProperty()).thenReturn(currentTimeMp1);
+        when(mediaPlayer1.friendly_durationProperty()).thenReturn(durationMp1);
         when(mediaPlayer1.friendly_rateProperty()).thenReturn(rateMp1);
         when(mediaPlayer2.friendly_currentTimeProperty()).thenReturn(currentTimeMp2);
+        when(mediaPlayer2.friendly_durationProperty()).thenReturn(durationMp2);
         when(mediaPlayer2.friendly_rateProperty()).thenReturn(rateMp2);
 
         systemUnderTest = new ChangeableMedia();
@@ -70,7 +76,7 @@ public class ChangeableMediaTest {
         verify(mediaPlayer2, never()).friendly_setRate(anyDouble());
 
         systemUnderTest.changeMedia(mediaPlayer1);
-       
+
         systemUnderTest.play();
         verify(mediaPlayer1).friendly_play();
         systemUnderTest.pause();
@@ -133,7 +139,7 @@ public class ChangeableMediaTest {
         assertThat(systemUnderTest.currentTimeProperty().get(), is(Duration.seconds(20)));
     }
 
-    @Test public void shouldRespondToAudioDuration(){
+    @Test public void shouldRespondToCurrentTime(){
         ChangeListener<Duration> listener = mock(ChangeListener.class);
         systemUnderTest.currentTimeProperty().addListener(listener);
 
@@ -183,6 +189,39 @@ public class ChangeableMediaTest {
         rateMp1.set(2.1);
 
         verify(listener).changed(any(), any(), eq(Double.valueOf(2.1)));
+    }
+
+    @Test public void shouldProvideDurationProperty(){
+        assertThat(systemUnderTest.durationProperty(), is(notNullValue()));
+
+        systemUnderTest.changeMedia(mediaPlayer1);
+
+        durationMp1.set(Duration.seconds(10));
+        assertThat(systemUnderTest.durationProperty().get(), is(Duration.seconds(10)));
+
+        durationMp2.set(Duration.seconds(20));
+        assertThat(systemUnderTest.durationProperty().get(), is(Duration.seconds(10)));
+
+        systemUnderTest.changeMedia(null);
+
+        durationMp1.set(Duration.seconds(30));
+        assertThat(systemUnderTest.durationProperty().get(), is(Duration.ZERO));
+
+        systemUnderTest.changeMedia(mediaPlayer2);
+        assertThat(systemUnderTest.durationProperty().get(), is(Duration.seconds(20)));
+
+        durationMp1.set(Duration.seconds(40));
+        assertThat(systemUnderTest.durationProperty().get(), is(Duration.seconds(20)));
+    }
+
+    @Test public void shouldRespondToDuration(){
+        ChangeListener<Duration> listener = mock(ChangeListener.class);
+        systemUnderTest.durationProperty().addListener(listener);
+
+        systemUnderTest.changeMedia(mediaPlayer1);
+        durationMp1.set(Duration.seconds(23));
+
+        verify(listener).changed(any(), any(), eq(Duration.seconds(23)));
     }
 
     @Test public void shouldProvidePlayingProperty(){
@@ -259,6 +298,5 @@ public class ChangeableMediaTest {
     private void assertThatCurrentTimeIs(double seconds) {
         assertThat(currentTimeMp1.get(), is(Duration.seconds(seconds)));
     }
-
 
 }

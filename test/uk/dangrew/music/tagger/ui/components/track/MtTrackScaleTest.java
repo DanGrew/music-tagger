@@ -8,8 +8,6 @@ import uk.dangrew.kode.TestCommon;
 import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.music.tagger.model.MusicTimestamp;
 import uk.dangrew.music.tagger.main.MusicTrackState;
-import uk.dangrew.music.tagger.ui.components.track.MtTrackScale;
-import uk.dangrew.music.tagger.ui.components.track.MtTrackScaleMarker;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 
 import java.util.List;
@@ -25,25 +23,27 @@ public class MtTrackScaleTest {
     private DoubleProperty width;
     private DoubleProperty height;
 
-    private MusicTrackState configuration;
+    private MusicTrackState musicTrackState;
     private MtTrackScale systemUnderTest;
 
     @Before
     public void initialiseSystemUnderTest() {
         TestApplication.startPlatform();
         initMocks(this);
-        configuration = new MusicTrackState();
-        configuration.currentPositionProperty().set(0.4);
-        configuration.currentTimeProperty().set(5.0);
+        musicTrackState = new MusicTrackState();
+        musicTrackState.currentPositionProperty().set(0.4);
+        musicTrackState.currentTimeProperty().set(5.0);
+        musicTrackState.scalePositionIntervalProperty().set(0.05);
+        musicTrackState.scaleTimeIntervalProperty().set(5);
         systemUnderTest = new MtTrackScale(
                 new CanvasDimensions(width = new SimpleDoubleProperty(), height = new SimpleDoubleProperty()),
-                configuration
+                musicTrackState
         );
     }
 
     @Test
     public void shouldAdjustMarkersBasedOnCurrentPositionChange() {
-        configuration.currentPositionProperty().set(0.5);
+        musicTrackState.currentPositionProperty().set(0.5);
 
         assertMarkersAreFocussedAround(0.10, -35);
     }
@@ -53,13 +53,13 @@ public class MtTrackScaleTest {
         List<MtTrackScaleMarker> markers = systemUnderTest.markers();
         assertThat(markers, hasSize(16));
 
-        configuration.currentTimeProperty().set(3.0);
+        musicTrackState.currentTimeProperty().set(3.0);
         assertMarkersAreFocussedAround(0.12, -25);
 
-        configuration.currentTimeProperty().set(2.0);
+        musicTrackState.currentTimeProperty().set(2.0);
         assertMarkersAreFocussedAround(0.13, -25);
 
-        configuration.currentTimeProperty().set(-1.0);
+        musicTrackState.currentTimeProperty().set(-1.0);
         assertMarkersAreFocussedAround(0.11, -35);
     }
 
@@ -68,13 +68,13 @@ public class MtTrackScaleTest {
         List<MtTrackScaleMarker> markers = systemUnderTest.markers();
         assertThat(markers, hasSize(16));
 
-        configuration.currentTimeProperty().set(8.0);
+        musicTrackState.currentTimeProperty().set(8.0);
         assertMarkersAreFocussedAround(0.12, -20);
 
-        configuration.currentTimeProperty().set(9.0);
+        musicTrackState.currentTimeProperty().set(9.0);
         assertMarkersAreFocussedAround(0.11, -20);
 
-        configuration.currentTimeProperty().set(11.0);
+        musicTrackState.currentTimeProperty().set(11.0);
         assertMarkersAreFocussedAround(0.14, -15);
     }
 

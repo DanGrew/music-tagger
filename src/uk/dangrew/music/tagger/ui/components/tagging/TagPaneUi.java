@@ -41,6 +41,8 @@ public class TagPaneUi extends Pane {
         TagWidget tagWidget = new TagWidget(tag, musicTrackState, canvasDimensions);
         tagWidgets.put(tag, tagWidget);
         getChildren().add(tagWidget);
+
+        updateTagPositions();
     }
 
     private void updateTagPositions(){
