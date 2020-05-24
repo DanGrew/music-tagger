@@ -4,11 +4,11 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import org.junit.Before;
 import org.junit.Test;
+import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.model.MusicTrack;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.NodePositioningTester;
-import uk.dangrew.sd.graphics.launch.TestApplication;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

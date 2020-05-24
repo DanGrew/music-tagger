@@ -26,6 +26,7 @@ public class MtMenuBar extends MenuBar {
     private final MenuItem loadTrack;
     private final MenuItem loadTags;
     private final MenuItem saveTags;
+    private final MenuItem clearTags;
 
     public MtMenuBar(MusicTrack musicTrack) {
         this(
@@ -64,6 +65,10 @@ public class MtMenuBar extends MenuBar {
         this.saveTags = new MenuItem("Save Tags");
         this.saveTags.setOnAction(event -> save());
         file.getItems().add(saveTags);
+
+        this.clearTags = new MenuItem("Clear Tags");
+        this.clearTags.setOnAction(event -> clearTags());
+        file.getItems().add(clearTags);
     }
 
     private void save() {
@@ -81,12 +86,16 @@ public class MtMenuBar extends MenuBar {
             return;
         }
 
+        clearTags();
+
+        dynamicModelMarshaller.read(new ArbitraryLocationProtocol(result));
+    }
+
+    private void clearTags(){
         Optional<ButtonType> clearTagsResult = systemAlerts.showTagClearanceAlert();
         if (clearTagsResult.get() == ButtonType.YES){
             musicTrack.clearTags();
         }
-
-        dynamicModelMarshaller.read(new ArbitraryLocationProtocol(result));
     }
 
     private void handleLoadTrack() {
@@ -107,5 +116,9 @@ public class MtMenuBar extends MenuBar {
 
     MenuItem saveTagsItem() {
         return saveTags;
+    }
+
+    MenuItem clearTagsItem(){
+        return clearTags;
     }
 }

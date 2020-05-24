@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import uk.dangrew.kode.friendly.javafx.FriendlyMouseEvent;
+import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.model.ChangeableMedia;
 import uk.dangrew.music.tagger.model.MusicTimestamp;
@@ -20,8 +21,6 @@ import uk.dangrew.music.tagger.model.Tag;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.LinePositioningTester;
 import uk.dangrew.music.tagger.ui.positioning.NodePositioningTester;
-import uk.dangrew.sd.graphics.launch.TestApplication;
-import uk.dangrew.sd.utility.TestCommon;
 
 import java.util.Optional;
 import java.util.OptionalDouble;
@@ -187,4 +186,12 @@ public class MtCurrentTimeSliderTest {
         verify(changeableMedia).seek(Duration.seconds(tags.get(1).getMusicTimestamp().seconds()));
     }
 
+    @Test public void shouldRemoveOldTags(){
+        Line tagLine = systemUnderTest.lineForTag(tags.get(0));
+        assertThat(systemUnderTest.getChildren().contains(tagLine), is(true));
+
+        musicTrack.getTags().clear();
+        assertThat(systemUnderTest.getChildren().contains(tagLine), is(false));
+        assertThat(systemUnderTest.getChildren().contains(tagLine), is(false));
+    }
 }

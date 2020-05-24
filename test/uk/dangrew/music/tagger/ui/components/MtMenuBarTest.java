@@ -10,10 +10,10 @@ import uk.dangrew.jupa.file.protocol.ArbitraryLocationProtocol;
 import uk.dangrew.jupa.json.marshall.DynamicModelMarshaller;
 import uk.dangrew.kode.friendly.controlsfx.FriendlyFileChooser;
 import uk.dangrew.kode.friendly.javafx.FriendlyMediaPlayer;
+import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.music.tagger.model.ChangeableMedia;
 import uk.dangrew.music.tagger.model.MusicTrack;
 import uk.dangrew.music.tagger.ui.SystemAlerts;
-import uk.dangrew.sd.graphics.launch.TestApplication;
 
 import java.io.File;
 import java.util.Optional;
@@ -94,4 +94,9 @@ public class MtMenuBarTest {
         verify(musicTrack).clearTags();
     }
 
+    @Test public void shouldClearTags(){
+        when(systemAlerts.showTagClearanceAlert()).thenReturn(Optional.of(ButtonType.YES));
+        systemUnderTest.clearTagsItem().fire();
+        verify(musicTrack).clearTags();
+    }
 }

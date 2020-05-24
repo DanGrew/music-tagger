@@ -36,6 +36,8 @@ public class MediaControlsUi extends GridPane {
     private final Button stop;
     private final Button plus30;
     private final Button minus30;
+    private final Button plus5;
+    private final Button minus5;
     private final Button speedUp;
     private final Button slowDown;
 
@@ -56,11 +58,17 @@ public class MediaControlsUi extends GridPane {
         this.stop.setOnAction(event -> musicController.stop());
         this.stop.setFocusTraversable(false);
         this.plus30 = new Button("+30s");
-        this.plus30.setOnAction(event -> musicController.plus30());
+        this.plus30.setOnAction(event -> musicController.plus(30));
         this.plus30.setFocusTraversable(false);
         this.minus30 = new Button("-30s");
-        this.minus30.setOnAction(event -> musicController.minus30());
+        this.minus30.setOnAction(event -> musicController.minus(30));
         this.minus30.setFocusTraversable(false);
+        this.plus5 = new Button("+5s");
+        this.plus5.setOnAction(event -> musicController.plus(5));
+        this.plus5.setFocusTraversable(false);
+        this.minus5 = new Button("-5s");
+        this.minus5.setOnAction(event -> musicController.minus(5));
+        this.minus5.setFocusTraversable(false);
         this.speedUp = new Button(">>");
         this.speedUp.setOnAction(event -> musicController.speedUp());
         this.speedUp.setFocusTraversable(false);
@@ -71,8 +79,10 @@ public class MediaControlsUi extends GridPane {
         int column = 0;
         this.add(slowDown, column++, 0);
         this.add(minus30, column++, 0);
+        this.add(minus5, column++, 0);
         this.add(play, column++, 0);
         this.add(stop, column++, 0);
+        this.add(plus5, column++, 0);
         this.add(plus30, column++, 0);
         this.add(speedUp, column++, 0);
 
@@ -120,6 +130,8 @@ public class MediaControlsUi extends GridPane {
         stop.setDisable(isRecording);
         plus30.setDisable(isRecording);
         minus30.setDisable(isRecording);
+        plus5.setDisable(isRecording);
+        minus5.setDisable(isRecording);
         speedUp.setDisable(isRecording);
         slowDown.setDisable(isRecording);
 
@@ -144,6 +156,14 @@ public class MediaControlsUi extends GridPane {
 
     Button plus30() {
         return plus30;
+    }
+
+    Button minus5() {
+        return minus5;
+    }
+
+    Button plus5() {
+        return plus5;
     }
 
     Button slowDown() {

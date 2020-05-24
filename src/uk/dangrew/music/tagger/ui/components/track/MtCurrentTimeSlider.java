@@ -120,9 +120,26 @@ public class MtCurrentTimeSlider extends Pane {
 
         this.currentTimeLine.setOnMouseDragged(event -> currentLineDragged(new FriendlyMouseEvent(event)));
 
-        this.musicTrack.getTags().forEach(this::createTagJumpTo);
-        ListChangeListener<Tag> listChangeListener = change -> musicTrack.getTags().forEach(this::createTagJumpTo);
+        populateTags();
+        ListChangeListener<Tag> listChangeListener = change -> {
+            refreshTags();
+            populateTags();
+        };
         this.musicTrack.getTags().addListener(listChangeListener);
+    }
+
+    private void populateTags(){
+        musicTrack.getTags().forEach(this::createTagJumpTo);
+    }
+
+    private void refreshTags(){
+        Map<Tag, Line> copy = new HashMap<>(tagLines);
+        for (Map.Entry<Tag, Line> tagLineEntry : copy.entrySet()) {
+            if ( !musicTrack.getTags().contains(tagLineEntry.getKey())){
+                tagLines.remove(tagLineEntry.getKey());
+                getChildren().remove(tagLineEntry.getValue());
+            }
+        }
     }
 
     private void createTagJumpTo(Tag tag) {
@@ -175,7 +192,7 @@ public class MtCurrentTimeSlider extends Pane {
     }
 
     private void updateDurationLabel(){
-        endLabel.setText(MusicTimestamp.format(musicTrack.mediaPlayer().durationProperty().get().toSeconds()));
+        endLabel.setText(MusicTimestamp.format(musicTrack.mediaPlayer().durationProperty().get()));
     }
 
     DoubleProperty currentTimeWidthProperty() {

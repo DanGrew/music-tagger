@@ -1,5 +1,7 @@
 package uk.dangrew.music.tagger.model;
 
+import javafx.util.Duration;
+
 import java.text.DecimalFormat;
 import java.util.Objects;
 
@@ -28,6 +30,14 @@ public class MusicTimestamp {
             return minutes + ":" + SECONDS_FORMAT.format(Math.abs(remainderSeconds));
         } else {
             return "-" + minutes + ":" + SECONDS_FORMAT.format(Math.abs(remainderSeconds));
+        }
+    }
+
+    public static String format(Duration duration){
+        if ( duration == null ) {
+            return format(0.0);
+        } else {
+            return format(duration.toSeconds());
         }
     }
 

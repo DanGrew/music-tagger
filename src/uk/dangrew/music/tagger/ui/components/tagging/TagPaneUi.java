@@ -2,6 +2,7 @@ package uk.dangrew.music.tagger.ui.components.tagging;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 import uk.dangrew.music.tagger.model.MusicTrack;
 import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.model.Tag;
@@ -28,9 +29,26 @@ public class TagPaneUi extends Pane {
             updateTagPositions();
         });
 
-        musicTrack.getTags().forEach(this::createTagLine);
-        ListChangeListener<Tag> listChangeListener = change -> musicTrack.getTags().forEach(this::createTagLine);
+        populateTags();
+        ListChangeListener<Tag> listChangeListener = change -> {
+            refreshTags();
+            populateTags();
+        };
         musicTrack.getTags().addListener( listChangeListener);
+    }
+
+    private void populateTags(){
+        musicTrack.getTags().forEach(this::createTagLine);
+    }
+
+    private void refreshTags(){
+        Map<Tag, TagWidget> copy = new HashMap<>(tagWidgets);
+        for (Map.Entry<Tag, TagWidget> tagLineEntry : copy.entrySet()) {
+            if ( !musicTrack.getTags().contains(tagLineEntry.getKey())){
+                tagWidgets.remove(tagLineEntry.getKey());
+                getChildren().remove(tagLineEntry.getValue());
+            }
+        }
     }
 
     private void createTagLine(Tag tag){

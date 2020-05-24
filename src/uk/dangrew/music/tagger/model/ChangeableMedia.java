@@ -88,7 +88,6 @@ public class ChangeableMedia implements ReadOnlyMedia {
 
     public void setRate(double value) {
         mediaPlayer.ifPresent(player -> player.friendly_setRate(value));
-        stop();
     }
 
     @Override

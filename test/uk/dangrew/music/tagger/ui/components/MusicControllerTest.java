@@ -53,7 +53,7 @@ public class MusicControllerTest {
     public void shouldSkipAhead(){
         when(musicTrack.currentTime()).thenReturn(Duration.seconds(31));
 
-        systemUnderTest.plus30();
+        systemUnderTest.plus(30);
         verify(musicTrack).seek(Duration.seconds(61));
     }
 
@@ -61,7 +61,7 @@ public class MusicControllerTest {
     public void shouldSkipBack(){
         when(musicTrack.currentTime()).thenReturn(Duration.seconds(31));
 
-        systemUnderTest.minus30();
+        systemUnderTest.minus(30);
         verify(musicTrack).seek(Duration.seconds(1));
     }
 

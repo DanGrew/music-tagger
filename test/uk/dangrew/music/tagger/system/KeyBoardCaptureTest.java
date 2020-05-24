@@ -5,7 +5,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import org.junit.Before;
 import org.junit.Test;
-import uk.dangrew.music.tagger.system.KeyBoardCapture;
+import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.music.tagger.utility.KeyEventCreator;
 
 import java.util.function.Consumer;
@@ -20,6 +20,7 @@ public class KeyBoardCaptureTest {
 
     @Before
     public void initialiseSystemUnderTest(){
+        TestApplication.startPlatform();
         scene = new Scene(new BorderPane());
         systemUnderTest = new KeyBoardCapture(scene);
     }

@@ -6,6 +6,7 @@ import javafx.util.Duration;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.model.ReadOnlyMedia;
 import uk.dangrew.music.tagger.ui.components.MusicController;
@@ -35,8 +36,7 @@ public class MediaControlsUiTest {
 
     @Before
     public void initialiseSystemUnderTest() {
-        PlatformImpl.startup(() -> {
-        });
+        TestApplication.startPlatform();
 
         initMocks(this);
 
@@ -73,10 +73,16 @@ public class MediaControlsUiTest {
         verify(controller).stop();
 
         systemUnderTest.plus30().fire();
-        verify(controller).plus30();
+        verify(controller).plus(30);
 
         systemUnderTest.minus30().fire();
-        verify(controller).minus30();
+        verify(controller).minus(30);
+
+        systemUnderTest.plus5().fire();
+        verify(controller).plus(30);
+
+        systemUnderTest.minus5().fire();
+        verify(controller).minus(30);
 
         systemUnderTest.speedUp().fire();
         verify(controller).speedUp();

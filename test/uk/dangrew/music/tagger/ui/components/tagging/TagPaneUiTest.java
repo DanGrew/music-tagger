@@ -66,4 +66,13 @@ public class TagPaneUiTest {
         assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(2)).getTag(), is(musicTrack.getTags().get(2)));
     }
 
+    @Test public void shouldRemoveTags(){
+        TagWidget widget = systemUnderTest.tagWidgetFor(musicTrack.getTags().get(0));
+        assertThat(widget.getTag(), is(musicTrack.getTags().get(0)));
+        assertThat(systemUnderTest.getChildren().contains(widget), is(true));
+
+        musicTrack.clearTags();
+        assertThat(systemUnderTest.getChildren().contains(widget), is(false));
+    }
+
 }

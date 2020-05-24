@@ -87,7 +87,7 @@ public class ChangeableMediaTest {
         verify(mediaPlayer1).friendly_seek(Duration.ONE);
         systemUnderTest.setRate(4.0);
         verify(mediaPlayer1).friendly_setRate(4.0);
-        verify(mediaPlayer1, times(2)).friendly_stop();
+        verify(mediaPlayer1).friendly_stop();
 
         systemUnderTest.changeMedia(mediaPlayer2);
 
@@ -98,16 +98,16 @@ public class ChangeableMediaTest {
         verify(mediaPlayer1).friendly_pause();
         verify(mediaPlayer2).friendly_pause();
         systemUnderTest.stop();
-        verify(mediaPlayer1, times(2)).friendly_stop();
+        verify(mediaPlayer1).friendly_stop();
         verify(mediaPlayer2).friendly_stop();
         systemUnderTest.seek(Duration.ONE);
         verify(mediaPlayer1).friendly_seek(Duration.ONE);
         verify(mediaPlayer2).friendly_seek(Duration.ONE);
         systemUnderTest.setRate(4.0);
         verify(mediaPlayer1).friendly_setRate(4.0);
-        verify(mediaPlayer1, times(2)).friendly_stop();
+        verify(mediaPlayer1).friendly_stop();
         verify(mediaPlayer2).friendly_setRate(4.0);
-        verify(mediaPlayer2, times(2)).friendly_stop();
+        verify(mediaPlayer2).friendly_stop();
     }
 
     @Test public void shouldProvidecurrentTimeProperty(){
@@ -288,7 +288,6 @@ public class ChangeableMediaTest {
         systemUnderTest.changeMedia(mediaPlayer1);
         systemUnderTest.setRate(2.0);
         verify(mediaPlayer1).friendly_setRate(2.0);
-        verify(mediaPlayer1).friendly_stop();
     }
 
     private void changeDurationTo(double seconds) {

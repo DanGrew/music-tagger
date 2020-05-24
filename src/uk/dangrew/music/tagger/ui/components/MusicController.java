@@ -37,12 +37,12 @@ public class MusicController {
         media.stop();
     }
 
-    public void plus30(){
-        media.seek(media.currentTime().add(SKIP_DURATION_SECONDS));
+    public void plus(double seconds){
+        media.seek(media.currentTime().add(Duration.seconds(seconds)));
     }
 
-    public void minus30(){
-        media.seek(media.currentTime().subtract(SKIP_DURATION_SECONDS));
+    public void minus(double seconds){
+        media.seek(media.currentTime().subtract(Duration.seconds(seconds)));
     }
 
     public void speedUp(){
