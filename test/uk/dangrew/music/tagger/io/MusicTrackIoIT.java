@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class MusicTrackIoIntegrationTest {
+public class MusicTrackIoIT {
 
     private MusicTrack testConfigurationMusicTrack;
     private MusicTrack populatedMusicTrack;
