@@ -29,8 +29,6 @@ public class MtCurrentTimeSlider extends Pane {
     public static final double LABEL_WIDTH_START_PORTION = 0.05;
     public static final double LABEL_WIDTH_END_PORTION = 0.95;
 
-    private final Map<Tag, Line> tagLines;
-
     private final CanvasDimensions canvasDimensions;
     private final CanvasLineRelativePositioning canvasLineRelativePositioning;
 
@@ -44,6 +42,8 @@ public class MtCurrentTimeSlider extends Pane {
     private final Line endHook;
     private final Label startLabel;
     private final Label endLabel;
+
+    private final Map<Tag, MtctsJumpToWidget> tagLines;
 
     public MtCurrentTimeSlider(CanvasDimensions canvasDimensions, MusicTrack musicTrack, MusicTrackState musicTrackState) {
         this.canvasDimensions = canvasDimensions;
@@ -128,14 +128,14 @@ public class MtCurrentTimeSlider extends Pane {
         this.musicTrack.getTags().addListener(listChangeListener);
     }
 
-    private void populateTags(){
+    private void populateTags() {
         musicTrack.getTags().forEach(this::createTagJumpTo);
     }
 
-    private void refreshTags(){
+    private void refreshTags() {
         Map<Tag, Line> copy = new HashMap<>(tagLines);
         for (Map.Entry<Tag, Line> tagLineEntry : copy.entrySet()) {
-            if ( !musicTrack.getTags().contains(tagLineEntry.getKey())){
+            if (!musicTrack.getTags().contains(tagLineEntry.getKey())) {
                 tagLines.remove(tagLineEntry.getKey());
                 getChildren().remove(tagLineEntry.getValue());
             }
@@ -143,41 +143,21 @@ public class MtCurrentTimeSlider extends Pane {
     }
 
     private void createTagJumpTo(Tag tag) {
-        Line line = tagLines.get(tag);
+        MtctsJumpToWidget line = tagLines.get(tag);
         if (line != null) {
             return;
         }
 
-        line = new Line();
-        line.setStroke(Color.MAGENTA);
-        line.setStrokeWidth(2);
-
-        double tagTimeInSeconds = tag.getMusicTimestamp().seconds();
-        double trackLengthInSeconds = musicTrack.mediaPlayer().durationProperty().get().toSeconds();
-        double portionOfSong = tagTimeInSeconds / trackLengthInSeconds;
-        double widthPosition = TRACK_LENGTH_PORTION_OF_WIDTH * portionOfSong + WIDTH_START_PORTION;
-
-        canvasLineRelativePositioning.bind(line, new LinePortions(
-                new AbsolutePositioning(widthPosition),
-                new AbsolutePositioning(widthPosition),
-                new AbsolutePositioning(HOOK_HEIGHT_START_PORTION),
-                new AbsolutePositioning(HOOK_HEIGHT_END_PORTION
-                )));
-
-        line.setOnMouseReleased(event -> tagLineReleased(tag));
+        line = new MtctsJumpToWidget(tag, musicTrack, canvasDimensions);
         getChildren().add(line);
         tagLines.put(tag, line);
-    }
-
-    void tagLineReleased(Tag tag){
-        musicTrack.mediaPlayer().seek(Duration.seconds(tag.getMusicTimestamp().seconds()));
     }
 
     void currentLineDragged(FriendlyMouseEvent event) {
         double startScreenWidth = canvasDimensions.width() * WIDTH_START_PORTION;
         double endScreenWidth = canvasDimensions.width() * WIDTH_END_PORTION;
         double trackScreenLength = endScreenWidth - startScreenWidth;
-        double offsetMousePosition = event.getX() - WIDTH_START_PORTION * canvasDimensions.width();
+        double offsetMousePosition = event.friendly_getX() - WIDTH_START_PORTION * canvasDimensions.width();
         double songProgress = offsetMousePosition / trackScreenLength;
         double duration = musicTrack.mediaPlayer().durationProperty().get().toSeconds();
 
@@ -191,7 +171,7 @@ public class MtCurrentTimeSlider extends Pane {
         currentTimeWidthProperty.set(widthPortionPerSecond * musicTrackState.currentTimeProperty().get() + WIDTH_START_PORTION);
     }
 
-    private void updateDurationLabel(){
+    private void updateDurationLabel() {
         endLabel.setText(MusicTimestamp.format(musicTrack.mediaPlayer().durationProperty().get()));
     }
 
@@ -223,7 +203,7 @@ public class MtCurrentTimeSlider extends Pane {
         return endLabel;
     }
 
-    Line lineForTag(Tag tag){
+    Line lineForTag(Tag tag) {
         return tagLines.get(tag);
     }
 }

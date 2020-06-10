@@ -44,15 +44,15 @@ public class TagPaneUiTest {
         musicTrack.tag(new MusicTimestamp(13.0));
         musicTrack.tag(new MusicTimestamp(27.0));
 
-        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(0)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(0)));
-        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(1)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(1)));
-        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(2)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(2)));
+        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getSortedTags().get(0)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(0)));
+        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getSortedTags().get(1)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(1)));
+        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getSortedTags().get(2)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(2)));
 
         musicTrackState.currentTimeProperty().set(1.0);
 
-        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(0)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(0)));
-        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(1)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(1)));
-        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getTags().get(2)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(2)));
+        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getSortedTags().get(0)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(0)));
+        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getSortedTags().get(1)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(1)));
+        assertThat(systemUnderTest.tagWidgetFor(musicTrack.getSortedTags().get(2)).getTextFieldWidthProperty().get(), is( TagPaneUi.TEXT_POSITIONS.get(2)));
     }
 
     @Test

@@ -9,7 +9,6 @@ import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.music.tagger.model.ChangeableMedia;
 import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.ui.components.MusicController;
-import uk.dangrew.music.tagger.ui.components.track.MusicTrackUi;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.LinePositioningTester;
 
@@ -45,31 +44,31 @@ public class MusicTrackUiTest {
     @Test
     public void shouldBePositioned() {
         LinePositioningTester tester = new LinePositioningTester(systemUnderTest.skeleton(), width, height);
-        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+        tester.assertThatFixedWidthIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MusicTrackUi.WIDTH_PORTION),
                 OptionalDouble.of(MusicTrackUi.WIDTH_PORTION)
         );
-        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+        tester.assertThatFixedHeightIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MusicTrackUi.START_HEIGHT_PORTION),
                 OptionalDouble.of(MusicTrackUi.END_HEIGHT_PORTION)
         );
 
         tester = new LinePositioningTester(systemUnderTest.leftHook(), width, height);
-        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+        tester.assertThatFixedWidthIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MusicTrackUi.MARKER_WIDTH_START_PORTION),
                 OptionalDouble.of(MusicTrackUi.MARKER_WIDTH_START_PORTION)
         );
-        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+        tester.assertThatFixedHeightIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MusicTrackUi.START_HEIGHT_PORTION),
                 OptionalDouble.of(MusicTrackUi.END_HEIGHT_PORTION)
         );
 
         tester = new LinePositioningTester(systemUnderTest.rightHook(), width, height);
-        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+        tester.assertThatFixedWidthIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MusicTrackUi.MARKER_WIDTH_END_PORTION),
                 OptionalDouble.of(MusicTrackUi.MARKER_WIDTH_END_PORTION)
         );
-        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+        tester.assertThatFixedHeightIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MusicTrackUi.START_HEIGHT_PORTION),
                 OptionalDouble.of(MusicTrackUi.END_HEIGHT_PORTION)
         );

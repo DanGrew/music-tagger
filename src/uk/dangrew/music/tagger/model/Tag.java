@@ -29,7 +29,7 @@ public class Tag implements Comparable<Tag> {
 
     @Override
     public int compareTo(Tag o) {
-        int timestampCompare = Double.compare(this.musicTimestamp.seconds(), o.musicTimestamp.seconds());
+        int timestampCompare = Double.compare(this.musicTimestamp.secondsProperty().get(), o.musicTimestamp.secondsProperty().get());
         if (timestampCompare != 0) {
             return timestampCompare;
         }

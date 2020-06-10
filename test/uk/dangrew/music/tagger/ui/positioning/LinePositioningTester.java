@@ -28,7 +28,7 @@ public class LinePositioningTester {
         this.node = node;
     }
 
-    public void assertThatLineTranslatesWhenWidthDimensionChanges(
+    public void assertThatFixedWidthIsRespectedWhenDimensionChanges(
             OptionalDouble startWidthPortion,
             OptionalDouble endWidthPortion
     ) {
@@ -41,7 +41,7 @@ public class LinePositioningTester {
         endWidthPortion.ifPresent(portion -> assertThat(node.getEndX(), is(portion * width.get())));
     }
 
-    public void assertThatLineTranslatesWhenHeightDimensionChanges(
+    public void assertThatFixedHeightIsRespectedWhenDimensionChanges(
             OptionalDouble startHeightPortion,
             OptionalDouble endHeightPortion
     ) {
@@ -54,7 +54,7 @@ public class LinePositioningTester {
         endHeightPortion.ifPresent(portion -> assertThat(node.getEndY(), is(portion * height.get())));
     }
 
-    public void assertThatPositionRecalculatesWhenWidthPropertiesChange(
+    public void assertThatRelativeWidthIsRespectedWhenDimensionChanges(
             Optional<DoubleProperty> startWidthProperty,
             Optional<DoubleProperty> endWidthProperty
     ) {
@@ -69,7 +69,7 @@ public class LinePositioningTester {
         endWidthProperty.ifPresent(property -> assertThat(node.getEndX(), is(property.get() * width.get())));
     }
 
-    public void assertThatPositionRecalculatesWhenHeightPropertiesChange(
+    public void assertThatRelativeHeightIsRespectedWhenDimensionChanges(
             Optional<ReadOnlyDoubleProperty> startHeightProperty,
             Optional<DoubleConsumer> startHeightPropertySetter,
             Optional<ReadOnlyDoubleProperty> endHeightProperty,

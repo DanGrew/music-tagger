@@ -15,6 +15,8 @@ public class MusicTrackState {
     private final DoubleProperty scalePositionIntervalProperty;
     private final DoubleProperty scaleTimeIntervalProperty;
     private final BooleanProperty recordingProperty;
+//    private final BooleanProperty playingProperty;
+//    private final BooleanProperty durationProperty;
 
     public MusicTrackState() {
         this.currentPositionProperty = new SimpleDoubleProperty(0.4);

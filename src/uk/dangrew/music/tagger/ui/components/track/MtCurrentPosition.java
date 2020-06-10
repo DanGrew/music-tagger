@@ -14,6 +14,7 @@ public class MtCurrentPosition extends Line {
 
     public static final double MINIMUM_POSITION = 0.1;
     public static final double MAXIMUM_POSITION = 0.9;
+    public static final double TRACK_PORTION_LENGTH = MAXIMUM_POSITION - MINIMUM_POSITION;
     public static final double WIDTH_START_PORTION = 0.3;
     public static final double WIDTH_END_PORTION = 0.7;
 
@@ -45,7 +46,7 @@ public class MtCurrentPosition extends Line {
 
     void mouseDragged(FriendlyMouseEvent event) {
         double height = canvasDimensions.height();
-        double portionAdjusted = event.getY() / height;
+        double portionAdjusted = event.friendly_getY() / height;
         musicTrackState.currentPositionProperty().set(portionAdjusted);
     }
 }

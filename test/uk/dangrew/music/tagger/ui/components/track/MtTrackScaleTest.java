@@ -49,6 +49,20 @@ public class MtTrackScaleTest {
     }
 
     @Test
+    public void shouldAdjustMarkersBasedOnScaleTimeIntervalChange() {
+        musicTrackState.scaleTimeIntervalProperty().set(10);
+
+        assertMarkersAreFocussedAround(0.125, -50);
+    }
+
+    @Test
+    public void shouldAdjustMarkersBasedOnPositionIntervalChange() {
+        musicTrackState.scalePositionIntervalProperty().set(0.1);
+
+        assertMarkersAreFocussedAround(0.10, -10);
+    }
+
+    @Test
     public void shouldAdjustMarkersWhenHitMaximum() {
         List<MtTrackScaleMarker> markers = systemUnderTest.markers();
         assertThat(markers, hasSize(16));
@@ -85,13 +99,15 @@ public class MtTrackScaleTest {
 
     private void assertMarkersAreFocussedAround(double startPortion, double seconds) {
         List<MtTrackScaleMarker> markers = systemUnderTest.markers();
-        assertThat(markers, hasSize(16));
+        int expectedMarkerCount = (int )(MtCurrentPosition.TRACK_PORTION_LENGTH / musicTrackState.scalePositionIntervalProperty().get());
 
-        for (int i = 0; i < 16; i++) {
+        assertThat(markers, hasSize(expectedMarkerCount));
+
+        for (int i = 0; i < expectedMarkerCount; i++) {
             assertMarkerIsCorrect(
                     markers.get(i),
-                    startPortion + (i * MtTrackScale.MARKER_SEPARATION),
-                    MusicTimestamp.format(seconds + (i * MtTrackScale.SECONDS_PER_MARKER)
+                    startPortion + (i * musicTrackState.scalePositionIntervalProperty().get()),
+                    MusicTimestamp.format(seconds + (i * musicTrackState.scaleTimeIntervalProperty().get())
                     ));
         }
     }

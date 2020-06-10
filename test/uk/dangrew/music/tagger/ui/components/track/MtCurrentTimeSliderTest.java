@@ -73,11 +73,11 @@ public class MtCurrentTimeSliderTest {
         assertThat(systemUnderTest.getChildren().contains(systemUnderTest.skeleton()), is(true));
 
         LinePositioningTester tester = new LinePositioningTester(systemUnderTest.skeleton(), width, height);
-        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+        tester.assertThatFixedWidthIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtCurrentTimeSlider.WIDTH_START_PORTION),
                 OptionalDouble.of(MtCurrentTimeSlider.WIDTH_END_PORTION)
         );
-        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+        tester.assertThatFixedHeightIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtCurrentTimeSlider.SKELETON_HEIGHT_PORTION),
                 OptionalDouble.of(MtCurrentTimeSlider.SKELETON_HEIGHT_PORTION)
         );
@@ -88,11 +88,11 @@ public class MtCurrentTimeSliderTest {
         assertThat(systemUnderTest.getChildren().contains(systemUnderTest.startHook()), is(true));
 
         LinePositioningTester tester = new LinePositioningTester(systemUnderTest.startHook(), width, height);
-        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+        tester.assertThatFixedWidthIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtCurrentTimeSlider.WIDTH_START_PORTION),
                 OptionalDouble.of(MtCurrentTimeSlider.WIDTH_START_PORTION)
         );
-        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+        tester.assertThatFixedHeightIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtCurrentTimeSlider.HOOK_HEIGHT_START_PORTION),
                 OptionalDouble.of(MtCurrentTimeSlider.HOOK_HEIGHT_END_PORTION)
         );
@@ -100,11 +100,11 @@ public class MtCurrentTimeSliderTest {
         assertThat(systemUnderTest.getChildren().contains(systemUnderTest.endHook()), is(true));
 
         tester = new LinePositioningTester(systemUnderTest.endHook(), width, height);
-        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+        tester.assertThatFixedWidthIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtCurrentTimeSlider.WIDTH_END_PORTION),
                 OptionalDouble.of(MtCurrentTimeSlider.WIDTH_END_PORTION)
         );
-        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+        tester.assertThatFixedHeightIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtCurrentTimeSlider.HOOK_HEIGHT_START_PORTION),
                 OptionalDouble.of(MtCurrentTimeSlider.HOOK_HEIGHT_END_PORTION)
         );
@@ -133,11 +133,11 @@ public class MtCurrentTimeSliderTest {
         assertThat(systemUnderTest.getChildren().contains(systemUnderTest.currentTimeLine()), is(true));
 
         LinePositioningTester tester = new LinePositioningTester(systemUnderTest.currentTimeLine(), width, height);
-        tester.assertThatPositionRecalculatesWhenWidthPropertiesChange(
+        tester.assertThatRelativeWidthIsRespectedWhenDimensionChanges(
                 Optional.of(systemUnderTest.currentTimeWidthProperty()),
                 Optional.of(systemUnderTest.currentTimeWidthProperty())
         );
-        tester.assertThatLineTranslatesWhenHeightDimensionChanges(
+        tester.assertThatFixedHeightIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtCurrentTimeSlider.HOOK_HEIGHT_START_PORTION),
                 OptionalDouble.of(MtCurrentTimeSlider.HOOK_HEIGHT_END_PORTION)
         );
@@ -154,7 +154,7 @@ public class MtCurrentTimeSliderTest {
     @Test
     public void shouldSeekToDraggedPosition(){
         FriendlyMouseEvent mouseEvent = mock(FriendlyMouseEvent.class);
-        when(mouseEvent.getX()).thenReturn(400.0);
+        when(mouseEvent.friendly_getX()).thenReturn(400.0);
 
         musicTrackState.currentTimeProperty().set(100);
 
@@ -174,16 +174,10 @@ public class MtCurrentTimeSliderTest {
         Line tagLine = systemUnderTest.lineForTag(tags.get(0));
         assertThat(systemUnderTest.getChildren().contains(tagLine), is(true));
 
-        systemUnderTest.tagLineReleased(tags.get(0));
-        verify(changeableMedia).seek(Duration.seconds(tags.get(0).getMusicTimestamp().seconds()));
-
         tags.add(new Tag(new MusicTimestamp(200)));
 
         tagLine = systemUnderTest.lineForTag(tags.get(1));
         assertThat(systemUnderTest.getChildren().contains(tagLine), is(true));
-
-        systemUnderTest.tagLineReleased(tags.get(1));
-        verify(changeableMedia).seek(Duration.seconds(tags.get(1).getMusicTimestamp().seconds()));
     }
 
     @Test public void shouldRemoveOldTags(){

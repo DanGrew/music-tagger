@@ -25,7 +25,7 @@ public class MtTrackScale extends Pane {
         this.canvasDimensions = canvasDimensions;
         this.musicTrackState = musicTrackState;
         this.positionCalculator = new MtTrackScaleMarkerCalculator(musicTrackState);
-
+        setPickOnBounds(false);
         this.markers = new ArrayList<>();
         this.plotMarkers();
         this.updateMarkers();
@@ -34,6 +34,12 @@ public class MtTrackScale extends Pane {
             updateMarkers();
         });
         musicTrackState.currentTimeProperty().addListener((s, o, n) -> {
+            updateMarkers();
+        });
+        musicTrackState.scaleTimeIntervalProperty().addListener((s, o, n) ->{
+            updateMarkers();
+        });
+        musicTrackState.scalePositionIntervalProperty().addListener((s, o, n) ->{
             updateMarkers();
         });
     }

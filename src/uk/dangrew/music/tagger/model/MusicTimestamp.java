@@ -1,5 +1,7 @@
 package uk.dangrew.music.tagger.model;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.util.Duration;
 
 import java.text.DecimalFormat;
@@ -13,12 +15,10 @@ public class MusicTimestamp {
     private static final DecimalFormat SECONDS_FORMAT = new DecimalFormat("00.###");
     private static final int SECONDS_IN_A_MINUTE = 60;
 
-    private final double seconds;
-    private final String displayString;
+    private final DoubleProperty seconds;
 
     public MusicTimestamp(double seconds) {
-        this.seconds = seconds;
-        this.displayString = format(seconds);
+        this.seconds = new SimpleDoubleProperty(seconds);
     }
 
     public static String format(double seconds){
@@ -41,29 +41,16 @@ public class MusicTimestamp {
         }
     }
 
-    public double seconds() {
+    public double seconds(){
+        return secondsProperty().get();
+    }
+
+    public DoubleProperty secondsProperty() {
         return seconds;
     }
 
     public String displayString() {
-        return displayString;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        MusicTimestamp that = (MusicTimestamp) o;
-        return seconds == that.seconds;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(seconds);
+        return format(seconds.get());
     }
 
     @Override

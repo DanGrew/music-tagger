@@ -9,6 +9,10 @@ import javafx.collections.transformation.SortedList;
 import javafx.scene.media.Media;
 import uk.dangrew.kode.observable.PrivatelyModifiableObservableListImpl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * {@link MusicTrack} provides the information for the current focus of the tool, in terms of {@link Media} and model
  * data.
@@ -26,31 +30,42 @@ public class MusicTrack {
         this.nameProperty = new SimpleStringProperty();
         this.mediaPlayer = new ChangeableMedia();
         this.tags = FXCollections.observableArrayList();
-        this.publicTags = new PrivatelyModifiableObservableListImpl<>(new SortedList<>(tags));
+        this.publicTags = new PrivatelyModifiableObservableListImpl<>(tags);
     }
 
     public StringProperty nameProperty() {
         return nameProperty;
     }
 
-    public void tag(MusicTimestamp musicTimestamp) {
-        this.tags.add(new Tag(musicTimestamp));
+    public Tag tag(MusicTimestamp musicTimestamp) {
+        return tag(musicTimestamp, null);
     }
 
-    public void tag(MusicTimestamp musicTimestamp, String text) {
-        this.tags.add(new Tag(musicTimestamp, text));
+    public Tag tag(MusicTimestamp musicTimestamp, String text) {
+        Tag tag = new Tag(musicTimestamp, text);
+        tags.add(tag);
+        return tag;
     }
 
     public void clearTags(){
         this.tags.clear();
     }
 
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
+    }
+
     public ObservableList<Tag> getTags() {
         return publicTags;
+    }
+
+    public List<Tag> getSortedTags() {
+        List<Tag> sorted = new ArrayList<>(getTags());
+        Collections.sort(sorted);
+        return sorted;
     }
 
     public ChangeableMedia mediaPlayer() {
         return mediaPlayer;
     }
-
 }

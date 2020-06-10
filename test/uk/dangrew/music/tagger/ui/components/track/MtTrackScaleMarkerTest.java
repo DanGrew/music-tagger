@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import org.junit.Before;
 import org.junit.Test;
 import uk.dangrew.kode.launch.TestApplication;
-import uk.dangrew.music.tagger.ui.components.track.MtTrackScaleMarker;
 import uk.dangrew.music.tagger.ui.positioning.CanvasDimensions;
 import uk.dangrew.music.tagger.ui.positioning.LinePositioningTester;
 import uk.dangrew.music.tagger.ui.positioning.NodePositioningTester;
@@ -52,11 +51,11 @@ public class MtTrackScaleMarkerTest {
         nodePositioningTester.assertThatHeightPositionRecalculatesWhenPropertiesChange(systemUnderTest.heightPortionProperty(), value -> systemUnderTest.setPosition(value));
 
         LinePositioningTester linePositioningTester = new LinePositioningTester(systemUnderTest.marker(), width, height);
-        linePositioningTester.assertThatLineTranslatesWhenWidthDimensionChanges(
+        linePositioningTester.assertThatFixedWidthIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtTrackScaleMarker.MARKER_WIDTH_START_PORTION),
                 OptionalDouble.of(MtTrackScaleMarker.MARKER_WIDTH_END_PORTION)
         );
-        linePositioningTester.assertThatPositionRecalculatesWhenHeightPropertiesChange(
+        linePositioningTester.assertThatRelativeHeightIsRespectedWhenDimensionChanges(
                 Optional.of(systemUnderTest.heightPortionProperty()), Optional.of(value -> systemUnderTest.setPosition(value)),
                 Optional.of(systemUnderTest.heightPortionProperty()), Optional.of(value -> systemUnderTest.setPosition(value))
         );

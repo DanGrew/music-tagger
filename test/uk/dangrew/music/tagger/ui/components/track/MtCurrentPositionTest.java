@@ -37,11 +37,11 @@ public class MtCurrentPositionTest {
     @Test
     public void shouldProvidePositioning() {
         LinePositioningTester tester = new LinePositioningTester(systemUnderTest, width, height);
-        tester.assertThatLineTranslatesWhenWidthDimensionChanges(
+        tester.assertThatFixedWidthIsRespectedWhenDimensionChanges(
                 OptionalDouble.of(MtCurrentPosition.WIDTH_START_PORTION),
                 OptionalDouble.of(MtCurrentPosition.WIDTH_END_PORTION)
         );
-        tester.assertThatPositionRecalculatesWhenHeightPropertiesChange(
+        tester.assertThatRelativeHeightIsRespectedWhenDimensionChanges(
                 Optional.ofNullable(musicTrackState.currentPositionProperty()),
                 Optional.of(value -> musicTrackState.currentPositionProperty().set(value)),
                 Optional.ofNullable(musicTrackState.currentPositionProperty()),
@@ -55,7 +55,7 @@ public class MtCurrentPositionTest {
         assertThat(systemUnderTest.getOnMouseDragged(), is(notNullValue()));
 
         FriendlyMouseEvent mouseEvent = mock(FriendlyMouseEvent.class);
-        when(mouseEvent.getY()).thenReturn(100.0);
+        when(mouseEvent.friendly_getY()).thenReturn(100.0);
 
         systemUnderTest.mouseDragged(mouseEvent);
         assertThat(musicTrackState.currentPositionProperty().get(), is(0.1));

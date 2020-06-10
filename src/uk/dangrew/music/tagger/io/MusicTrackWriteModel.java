@@ -38,7 +38,7 @@ class MusicTrackWriteModel {
    }//End Method
 
    Double getTimestamp() {
-      return currentTag.getMusicTimestamp().seconds();
+      return currentTag.getMusicTimestamp().secondsProperty().get();
    }//End Method
 
    String getText() {

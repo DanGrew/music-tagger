@@ -12,7 +12,7 @@ import java.util.*;
 
 public class TagPaneUi extends Pane {
 
-    static final List<Double> TEXT_POSITIONS = Arrays.asList(0.7, 0.8, 0.9);
+    static final List<Double> TEXT_POSITIONS = Arrays.asList(0.7, 0.81, 0.92);
 
     private final CanvasDimensions canvasDimensions;
     private final MusicTrack musicTrack;
@@ -56,7 +56,7 @@ public class TagPaneUi extends Pane {
             return;
         }
 
-        TagWidget tagWidget = new TagWidget(tag, musicTrackState, canvasDimensions);
+        TagWidget tagWidget = new TagWidget(tag, musicTrack, musicTrackState, canvasDimensions);
         tagWidgets.put(tag, tagWidget);
         getChildren().add(tagWidget);
 
@@ -66,7 +66,7 @@ public class TagPaneUi extends Pane {
     private void updateTagPositions(){
         int index = 0;
 
-        for (Tag tag : musicTrack.getTags()) {
+        for (Tag tag : musicTrack.getSortedTags()) {
             index = index % TEXT_POSITIONS.size();
 
             TagWidget tagWidget = tagWidgets.get(tag);
