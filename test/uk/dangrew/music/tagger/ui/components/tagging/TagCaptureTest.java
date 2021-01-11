@@ -1,26 +1,25 @@
 package uk.dangrew.music.tagger.ui.components.tagging;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
+
+import java.util.function.Consumer;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import uk.dangrew.kode.javafx.keyboard.KeyBoardCapture;
+import uk.dangrew.kode.javafx.keyboard.KeyEventCreator;
 import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.model.MusicTrack;
-import uk.dangrew.music.tagger.system.KeyBoardCapture;
-import uk.dangrew.music.tagger.ui.components.tagging.TagCapture;
-import uk.dangrew.music.tagger.utility.KeyEventCreator;
-
-import java.util.function.Consumer;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 public class TagCaptureTest {
 

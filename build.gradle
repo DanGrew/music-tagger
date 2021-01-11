@@ -26,11 +26,11 @@ version = buildNumberForThisEnvironment
 /*
  * SOURCE: source specific configuration
  */
-sourceCompatibility = 14
-targetCompatibility = 14
+sourceCompatibility = 11
+targetCompatibility = 11
 
 javafx {
-    version = "14"
+    version = "11"
     modules = [ 'javafx.base', 'javafx.controls', 'javafx.media', 'javafx.graphics']
 }
 
@@ -67,9 +67,9 @@ repositories {
 }
 
 dependencies {
-    compile group: 'uk.dangrew', name: 'dag-kode', version: '1.0.66'
-    compile group: 'SystemDigest', name: 'SystemDigest', version: '1.3.12'
-    compile group: 'jupa', name: 'JsonUpgradingPersistenceArchitecture', version: '1.2.8'
+    compile group: 'uk.dangrew', name: 'dag-kode', version: '1.1.71'
+    compile group: 'SystemDigest', name: 'SystemDigest', version: '1.3.15'
+    compile group: 'jupa', name: 'JsonUpgradingPersistenceArchitecture', version: '1.3.11'
     compile group: 'org.controlsfx', name: 'controlsfx', version:'8.40.11'
     compile group: 'dom4j', name: 'dom4j', version:'1.6.1'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.1.2'
@@ -78,13 +78,13 @@ dependencies {
     compile 'de.jensd:fontawesomefx-materialicons:2.2.0-9.1.2'
     compile group: 'de.jensd', name: 'fontawesomefx-fontawesome', version: '4.7.0-9.1.2'
 
-    testCompile group: 'uk.dangrew', name: 'dag-kode', version: '1.0.66', classifier: 'tests'
-    testCompile group: 'SystemDigest', name: 'SystemDigest', version: '1.3.12', classifier: 'tests'
+    testCompile group: 'uk.dangrew', name: 'dag-kode', version: '1.1.71', classifier: 'tests'
+    testCompile group: 'jupa', name: 'JsonUpgradingPersistenceArchitecture', version: '1.3.11', classifier: 'tests'
+    testCompile group: 'SystemDigest', name: 'SystemDigest', version: '1.3.15', classifier: 'tests'
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version:'1.0.5'
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version:'1.3'
     testCompile group: 'org.mockito', name: 'mockito-all', version:'1.9.5'
-    testCompile group: 'jupa', name: 'JsonUpgradingPersistenceArchitecture', version: '1.2.6', classifier: 'tests'
 }
 
 /*

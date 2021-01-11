@@ -8,19 +8,18 @@
  */
 package uk.dangrew.music.tagger.main;
 
-import com.sun.javafx.application.PlatformImpl;
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import uk.dangrew.kode.javafx.keyboard.KeyBoardCapture;
 import uk.dangrew.music.tagger.model.MusicTrack;
-import uk.dangrew.music.tagger.system.KeyBoardCapture;
 import uk.dangrew.music.tagger.ui.components.MtMenuBar;
 import uk.dangrew.music.tagger.ui.components.MusicController;
 import uk.dangrew.music.tagger.ui.components.MusicTrackEditor;
-
-import java.io.File;
 
 /**
  * Entry point to the system for launching.

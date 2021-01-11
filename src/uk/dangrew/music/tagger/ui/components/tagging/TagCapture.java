@@ -1,14 +1,14 @@
 package uk.dangrew.music.tagger.ui.components.tagging;
 
+import java.util.function.Consumer;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import uk.dangrew.kode.javafx.keyboard.KeyBoardCapture;
 import uk.dangrew.music.tagger.main.MusicTagger;
 import uk.dangrew.music.tagger.main.MusicTrackState;
 import uk.dangrew.music.tagger.model.MusicTimestamp;
 import uk.dangrew.music.tagger.model.MusicTrack;
-import uk.dangrew.music.tagger.system.KeyBoardCapture;
-
-import java.util.function.Consumer;
 
 public class TagCapture {
 
